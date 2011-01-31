@@ -1,0 +1,2318 @@
+\documentclass{article}
+\author{Daniele Degano}
+\title{Discrete Structures 2 notes}
+\date{last updated \today}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[pdftex]{graphicx,color}
+\usepackage{subfig}
+\usepackage{float}
+\usepackage{epstopdf}
+%\usepackage{ulem} % this package is to use the strikeout \sout{}
+
+
+\begin{document}
+\maketitle
+%\tableofcontents
+
+\graphicspath{{xfig-xports/}}
+
+\theoremstyle{definition}
+\newtheorem*{defn}{Definition}
+
+\theoremstyle{definition}
+\newtheorem*{examp}{Example}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+
+\theoremstyle{plain}
+\newtheorem{prop}{Proposition}
+
+\theoremstyle{plain}
+\newtheorem{cor}{Corollary}
+
+\theoremstyle{plain}
+\newtheorem{lem}{Lemma}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+
+\theoremstyle{remark}
+\newtheorem*{clm}{Claim}
+
+\theoremstyle{remark}
+\newtheorem*{cav}{Caveat}
+
+\theoremstyle{remark}
+\newtheorem*{rec}{Recall}
+
+\theoremstyle{remark}
+\newtheorem*{exer}{Exercise}
+%jan 4 notes
+\section*{4/1/2010}
+
+\begin{defn}
+A \emph{Graph} consists of a collection of \emph{vertices}/nodes/points $V$ together with a collection of \emph{edges}/arcs/lines $E$; together $e \in E$ connects two vertices together.  Formally, an edge e is a pair $\{u,v\}$ of vertices.
+\end{defn}
+
+\subsection*{Basic Properties of Graphs}
+
+The degree of a vertex $v \in V$ is the number of edges incident to (containing) $v$, denoted $deg(g)$ or $deg_G(v)$
+
+\begin{figure}[H]
+\centering
+ \input{xfig-xports/degree.pdf_t}
+\caption{Two vertices, $v_1,v_2$, are \emph{adjacent} if  $\{v_1,v_2\}$ is an edge}
+\end{figure}
+
+The \emph{neighbourhood} of a vertex $v$ is the set of vertices adjacent to $v$ and is denoted $N(v)$ or $N_G(v)$
+
+\begin{defn}
+A graph is \emph{simple} if there are no multiple edges and no loop edges ($\{v,v\}$, starts and ends at same vertex).  Otherwise, it is a \emph{multigraph}.  All graphs are simple unless otherwise stated
+\end{defn}
+
+\begin{defn}
+A \emph{path} in a graph $G$ is a sequence $P=v_0,v_1,\ldots,v_k$ of vertices s.t. for each $i=0,1,\ldots,k-1 ~, \{v_i,v_{i+1}\}$ is an edge in $E$, where $v_i \neq v_j$.
+\end{defn}
+
+
+
+\begin{defn}
+A \emph{cycle} in $G$ is a sequence $C=v_0,v_1,\ldots,v_k,v_0$ of vertices s.t.
+\begin{enumerate}
+ \item $v_0,v_1,\ldots,v_k$ is a path
+\item $\{v_k,v_0\}$ is an edge of the graph.
+\end{enumerate}
+\end{defn}
+
+\begin{examp}
+\begin{figure}[H]
+\centering
+\caption{Paths and Cycles}
+\input{xfig-xports/degree1.pdf_t}%-a using previous graph $abyv$ is a path, $abzy$ is not, nor is $abyb$
+%GRAPH-b $abzya$ is a cycle, but $abyvwxyza$ is not
+\label{fig:pathcyc}
+\end{figure}
+(Figure~\ref{fig:pathcyc}) $abyv$ is a path, $abzy$ is not, nor is $abyb$. $abzya$ is a cycle, but $abyvwxyza$ is not
+\end{examp}
+
+\begin{defn}
+A cycle $C$ is \emph{Hamiltonian} if every vertex of $V$ appears in $C$.  A graph $G$ is Hamiltonian if it contains a Hamiltonian cycle.
+\end{defn}
+
+\begin{rem}
+If every vertex $v \in V$ satisfies $deg(v)=|V|-1$, then the graph is Hamiltonian.
+\end{rem}
+
+\begin{proof}
+If $G$ satisfies the above hypothesis then $G$ contains \emph{all} possible edges. In this case, we call $G$ the \emph{complete} graph, and write $G = K_n$, where $n=|V|$.
+
+\begin{figure}[H]
+ \centering
+\input{xfig-xports/penta.pdf_t}
+\end{figure}
+\end{proof}
+
+\begin{thm}
+\emph{(Dirac's theorem for simple graphs):} if every vertex $v \in V$ satisfies $deg(v)> \frac{|V|}{2}$, then the graph $G$ is Hamiltonian.\footnote{by this theorem, $G$ is connected}
+\end{thm}
+
+
+
+
+%jan 6 notes
+\section*{6/1/2010}
+
+\begin{defn}
+A \emph{walk} in $G=(V,E)$ is a sequence $w=w_0 w_1 w_2,\ldots,w_k$ s.t. $\forall ~i = 0,1,\ldots,k-1,~ \{w_i, w_{i+1}\}$ is an edge in $G$.
+\end{defn}
+
+\begin{defn}
+A \emph{circuit} $c=w_0 w_1 w_2,\ldots,w_k,w_0$, a walk returning to where it started. An Eulerian cicuit is a circuit that contains each edge exactly once.
+\end{defn}
+
+
+\begin{figure}[H]
+\centering
+\caption{Walk and Circuit}
+\subfloat[A walk]{\includegraphics{xfig-xports/walk.eps}}\qquad \quad
+\subfloat[A circuit]{\includegraphics{xfig-xports/circuit.eps}}
+\end{figure}
+
+
+
+\begin{thm}
+$G=(V,E)$ contains an Eulerian circuit $\iff$ all vertex degees are even.
+\end{thm}
+
+\begin{proof}
+\begin{itemize}
+{}    
+ \item[($\Rightarrow$)] Any circuit passes through each vertex an even number of times.  So if all edges of the circuit are distinct, then the number of edges of the circuit incident to each vertex must be even.  So if the cycle is Eulerian, then all degrees are even.
+\item[($\Leftarrow$)]
+\end{itemize}
+\begin{figure}[H]
+\caption{Eulerian circuit}
+\centering
+\includegraphics{xfig-xports/e-circuit.eps}
+\end{figure}
+
+
+Starting from an arbitrary vertex and building some circuit we may
+\begin{enumerate}
+ \item decompose graph into collections of circuits
+\item starting from some vertex, build a circuit by always following the ``highest-labeled'' edge leaving the current vertex.
+\end{enumerate}
+The result is an Eulerian circuit.
+\end{proof}
+
+
+\begin{defn}
+given $G=(V,E)$ a graph, a \emph{subgraph} of $G$ is a graph $H=(V',E')$ s.t. $V'\subset V$, $E' \subset E$.  $H$ is a \emph{spanning subgraph} if $V=V'$. (Implicit is that $\forall~ e'=\{u',v'\}\in E'$, must have $u' \in V', v' \in V'$.)
+\end{defn}
+
+\begin{figure}[H]
+\centering
+\subfloat[graph $G$]{\includegraphics{xfig-xports/subgraph.eps}}\qquad \quad
+\subfloat[spanning subgraph]{\includegraphics{xfig-xports/subgraph1.eps}}\qquad \quad
+\subfloat[subgraph]{\includegraphics{xfig-xports/subgraph2.eps}}
+\caption{Examples of Subgraphs}
+\end{figure}
+
+\begin{defn}
+A \emph{matching} in $G$ is a spanning subgraph $H=(V',E')$ of $G$ in which every $v' \in V'$ has $deg_H(v')\leq 1$ (no two edges have common end point).  A matching is perfect if every $v'\in V'$ has $deg_H(v')=1$.  A matching is maximum if no other matching has more edges.
+\end{defn}
+
+\begin{rem}
+an odd number of vertices $\Rightarrow$ no perfect matchings; but there are other reasons as well.
+\end{rem}
+
+%jan 8 2010
+
+\section*{8/1/2010}
+
+\begin{defn}
+(Second Def): A \emph{matching} $M$ in a graph $G$ can be seen as a subset $M\subset E$, s.t. no vertex $v \in V$ is incident to two edges of $M$.  $M$ is perfect if every $v \in V$ is incident to some edge of $M$.  $M$ is \emph{maximum} if there is not matching strictly lesser.  $M$ is \emph{maximal} if there is no matching containing it.
+\end{defn}
+
+\begin{figure}[H]
+\caption{Examples of Matchings}
+\centering
+\subfloat[maximal matching]{\includegraphics[scale=0.8]{maximal-match.eps}}\qquad
+\subfloat[maximum and perfect matching]{\includegraphics[scale=0.8]{perf-match.eps}}
+\end{figure}
+
+\begin{defn}
+Let $M$ be a matching.  An \emph{M-alternating} path is a path $P$ whose edges are alternately in and not in $M$.  We say $P=v_0 v_1 , \ldots, v_k$ is \emph{M-augmenting} if it is M-alternating, and additionally, $v_0$ and $v_k$ are unmatched\footnote{not incident to any edge of} by $M$.
+\end{defn}
+
+
+\begin{thm}
+ Let $G=(V,E)$ be a graph.  A matching $M$ is maximum $\iff$ $G$ contains no M-augmenting paths.
+\end{thm}
+
+\begin{proof}
+\begin{itemize}
+ \item[($\Rightarrow$)] If $G$ contains an M-augmenting path $P=v_o v_1 v_2 \ldots v_{2m+1}$ Let, $M*=M \setminus \{v_1v_2, v_3 v_4, \ldots, v_{2m-1},v_{2m}\} \cup \{v_0 v_1, v_2 v_3, \ldots, v_{2m}v_{2m+1}\}$; then $M*$ is a matching strictly larger than $M$, so $M$ isn't maximum.
+\item[($\Leftarrow$)] Suppose M is not maximum, and let $M'$ be a maximum matching.
+\begin{figure}[H]
+\centering
+\includegraphics{xfig-xports/match-proof.eps}
+\end{figure}
+
+Write $M \Delta M'$ for $\{\textmd{edges of $M$ not in $M'$}\} \cup \{\textmd{edges of $M'$ not in $M$}\}$
+\begin{figure}[H]
+\centering
+\includegraphics{xfig-xports/match-proof1.eps}
+\end{figure}
+\end{itemize}
+
+\begin{clm}
+$M \Delta M'$ always contains some augmenting path.
+\end{clm}
+
+\begin{proof}
+$M \Delta M'$ can contain
+\begin{itemize}
+ \item M-alternating paths (that are not augmenting)
+\item M-augmenting paths
+\item M-alternating cycles (M-alternating cycles that have even length)
+\item M-alternating paths that are not M-augmenting contain at least as many edges of $M$ as of $M'$
+\item M-alternating cycles contain the same \# of edges of $M$ as of $M'$
+\end{itemize}
+
+But $M'$ has more edges than $M$, so to `use them up', $M \Delta M'$ must contain some augmenting paths
+\end{proof}
+
+Summary:
+\begin{itemize}
+ \item Supposed $M$ not maximum
+\item let $M'$ be maximum
+\item Show $M \Delta M'$ contains an M-augmenting path.  So, there exists an M-augmenting path
+\end{itemize}
+\end{proof}
+
+\begin{cav}
+To formalize the idea that $M \Delta M'$ can ``contain'' a path, we introduce \emph{induced} subgraphs.
+\end{cav}
+
+Given $G=(V,E)$, and $E' \subset E$, $G[E']$ is the graph with edge set $E'$ and vertex set $V' = \{ v \in V, v \textmd{ is incident to some } e \in E'\}.$ Say $G[E']$ is the subgraph of $G$ induced by $E'$.  Similarly, given $G=(V,E)$ and $V' \subset V$, let $G[V']$ be the graph with vertex set $V'$ and edge set $\{e \in E; \textmd{ both endpoints of } e \textmd{ are in } V' \}$
+
+\subsection*{Matchings in Bipartite graphs}
+
+\begin{defn}
+$G = (V,E)$ is the \emph{bipartite} if we can write $V=V_1 \cup V_2, V_1 \cap V \neq \emptyset$, and there are no edges within $V_1$ or within $V_2$.
+\end{defn}
+
+\begin{figure}
+\centering
+\caption{an edge $uv$ means a person $u$ is willing to perform job $v$}
+\includegraphics{xfig-xports/jobpeep.eps}
+\end{figure}
+
+
+\begin{rem}
+A graph is bipartite $\iff$ it contains no cycles of odd length.
+\end{rem}
+
+Let $G$ be bipartite with bipartition $V_1, V_2$ labeled so that $|V_1|\leq |V_2|$.  When can we give each person a job they are willing to perform?\footnote{Assignment problem} Potential obstacles: \begin{itemize}
+ \item Someone who doesn't want to work
+\item 5 people who between them are only happy with 4 jobs
+\item Some set $S \subset V_1$ of people s.t. $|N_G (S)| < |S|$ ($N_G (S) = (\displaystyle U_{v \in S} N_v(S))\setminus S$)
+\end{itemize}
+
+\begin{thm}
+\emph{(Hall's Theorem)} Let $G$ be bipartite with bipartition $V_1,V_2$ and $|V_1| \leq |V_2|$. Then $G$ contains a matching incident to every member of $V_1$ $\iff$ $|N_G(S)|\geq |S| ~ \forall ~S \subseteq V_1$
+\end{thm}
+
+%jan 11, 2010
+
+\section*{11/1/2010}
+
+\begin{rec}
+$G=(V,E),~v \in V$, then $N(v)=N_G(v)=\{w \in V: \{v,w\}\in E\}$ and $S\subset V$, then $N(S) = N_G(S)=(\displaystyle\bigcup_{v \in S} N(v))\setminus S$
+\end{rec}
+
+\begin{examp}
+$ $
+\begin{figure}[H]
+\centering
+\includegraphics{xfig-xports/neighbour.eps}
+\end{figure}
+For $S= \{a,b,c\}$, $N(S)=d,f$. But for $S = \{a,c\}$ $N(S)=\{d,b,f\}$.  In particular, $N(V) = \emptyset$
+\end{examp}
+
+
+\begin{thm}
+\emph{(Hall's Theorem)} Let $G=(V,E)$ bipartite, bipartition $V=V_1\cup V_2$, $|V_1| \leq |V_2|$, then $\exists$ a matching hitting every element of $V_1$ $\iff$  $\forall ~S \subseteq V_1$ $|N_G(S)|\geq |S|$
+\end{thm}
+\begin{figure}[H]
+\centering
+\caption{Hall's Theorem}
+\includegraphics{xfig-xports/Hall.eps}
+\end{figure}
+
+\begin{proof}
+\begin{itemize}
+ \item[($\Rightarrow$)] If $M$ is a matching hitting every element of $V_1$, for each $v \in V$, let $v'$ be the other endpoint of the edge of $M$ containing $v$.  Then $\forall ~ S \subset V_1$, $N(S) = \cup_{v \in S} \supset \displaystyle\bigcup_{v \in S} \{v'\}$, so $|N(S)\geq |\displaystyle\bigcup_{v\in S}\{v'\}|=|S|$
+\item[($\Leftarrow$)] Let $M^*$ be a maximum matching, suppose $|M^*| < |V_1|$, and let $u \in V_1$ be some vertex missed by $M^*$.  Let $Z$ be the collection of all vertices joined to $u$ via $M^*$-alternating paths, and let $Z_1=Z \cap V_1 ,~ Z_2 = Z \cap V_2$
+
+\begin{figure}[H]
+\centering
+\includegraphics{xfig-xports/hall-proof.eps}
+\end{figure}
+
+
+\begin{clm}
+$|Z_1| = |Z_2| +1$, and $N(Z_1) = Z_2$
+\end{clm}
+
+If we assume that the claim holds, then the theorem follows by taking $S=Z_1$.  Remains to prove the claim
+
+\begin{figure}[H]
+ \centering
+\includegraphics{xfig-xports/hall-proof1.eps}
+\end{figure}
+
+\begin{itemize}
+\item Note that by the definition of $Z$, all vertices of $Z_2$ are matched with vertices of $Z_1$.
+\item Similarly, all vertices of $Z_1$  (except for $u$) are matched with vertices of $Z_2$.
+\item It follows that $|Z_1| = |Z_2| +1 $
+\end{itemize}
+
+Want to show $N(Z_1) = Z_2$ (Note: $N(Z_1) \supseteq Z_2$).  First, $N(u) \subseteq Z_2$ by definition.  Next, for any $v \in Z_1$, $v \neq u$, if $\exists x $ not in $Z_2$ with $x\in N(v)$, then there is an alternating path from $u$ to $x$; but then $x \in Z_2$ a contradiction.
+
+\begin{figure}[H]
+ \centering
+\includegraphics{xfig-xports/hall-proof2.eps}
+\end{figure}
+
+So $N(v) \subseteq Z_2$.  Since $v$ was an arbitrary element of $Z_1 \setminus \{u\}$, if follows that $N(Z_1) = \displaystyle\bigcup_{w \in Z_1} N(w) \subseteq \bigcup_{w \in Z_1} Z_2 = Z_2$
+\end{itemize}
+\end{proof}
+
+\subsection*{Colourings, Edge colourings and K\"onig's Theorem}
+
+\begin{defn}
+$G=(V,E)$.  A colouring of $G$ is an assignment of colours to all $v \in V$; the couloring is \emph{proper} if no two adjacent vertices receive the same colour; the chromatic number $\chi (G)$ is the least number of distinct colours needed to properly colour G.
+\end{defn}
+\begin{examp}
+If $G$ is bipartite then $\chi (G) = 2$ and vice versa.
+\end{examp}
+
+LINE?
+
+\begin{defn}
+An edge colouring is an assignment of colours to the \emph{edges} of G; it is proper if no two \emph{incident} edges receive the same colour and the \emph{edge} chromatic number is the least number of colours needed to properly edge colour $G$, $\chi^e(G)$
+\end{defn}
+
+\begin{thm}
+\emph{(K\"onig's Theorem):} If G is bipartite and $deg(v)=d ~ \forall ~ v \in V$, then $\chi^e(G)=d$.
+\end{thm}
+
+\subsection*{Matchings in general graphs}
+
+\begin{figure}[H]
+\centering 
+\input{xfig-xports/triang.pdf_t}
+%\includegraphics{xfig-xports/triang.pdf}
+\end{figure}
+
+
+\begin{defn}
+ Given $G=(V,E)$, write $o(G)$ for the number of connected components of $G$ with an odd number of vertices.
+\end{defn}
+
+\begin{thm}
+\emph{(Tutte's matching theorem):} $G$ has a perfect matching $\iff$ $\forall$ subsets $S \subseteq V$ $|S| \geq 0$ ($S = \emptyset $ allowed), $o(G[V \setminus S]) \leq |S|$
+\end{thm}
+
+%13/1/2010
+
+\section*{13/1/2010}
+
+
+\begin{figure}[H]
+\centering
+\subfloat[No perfect Matching (take $S=\emptyset$)]{\input{xfig-xports/penta1.pdf_t}} \quad \qquad 
+\subfloat[take $S=\{v\}$]{\input{xfig-xports/triang1.pdf_t}}\quad \qquad 
+\subfloat[$S=\{u,v\}$]{\scalebox{.8}{\input{xfig-xports/tuttug.pdf_t}}}
+\caption{Examples of Tutte's theorem}
+\end{figure}
+
+
+\begin{defn}
+$G=(V,E)$ is connected if $\forall u,v \in V$, there exists a path from $u$ to $v$ in $G$. A connected vertex-induced subgraph $H$ of $G$ is a \emph{connected component} of $G$ if no vertex-induced subgraph of $G$ that strictly contains $H$, is connected.
+\end{defn}
+
+GRAPH 2
+
+\subsection*{Flows and Cuts}
+
+A directed graph (or digraph) $D=(V,\overrightarrow{E})$ consists of a set $V$ of vertices together with a collection $\overrightarrow{E}$ of \emph{oriented edges}\footnote{\emph{oriented edges $\equiv$ arcs}} $(u,v)$. If $e=(u,v)$, we call $u$ the \emph{tail} of $e$ and we call $v$ the \emph{head} of $e$.  
+
+GRAPH 3
+
+\begin{defn}
+A \emph{network} is a digraph $D=(V,E)$, together with a source $s \in V$, a sink $t \in V$, and a capacity function, $c: \overrightarrow{E} \rightarrow [0,\infty[$; $(D,s,t,c)$ is the network.
+\end{defn}
+
+\begin{rem}
+We allow zero capacities; adding 0 capacity edges doesn't change anything.  So we can always assume that $\overrightarrow{E}$ contains all possible edges (just some have capacity 0).
+\end{rem}
+
+\begin{defn}
+A function $f: \overrightarrow{E} \rightarrow [0,\infty[$ is called a \emph{flow} in $(D,s,t,c)$ if
+\begin{enumerate}
+ \item $\forall v \in V \setminus \{s,t\},~ \displaystyle\sum_{(u,v)} f(u,v) = \sum_{(v,w)} f(v,w)$ (Conservation of flow) \footnote{$\displaystyle  \sum_{(u,v)} \equiv \sum_{\{u=(u,v) \in \overrightarrow{E} \}}$}
+\item $\forall (u,v) \in \overrightarrow{E}, ~ f(u,v) \leq c(u,v)$ (Feasibility
+\end{enumerate}
+The \emph{value} of the flow f is $val(f)=\displaystyle\sum_{(s,u)} f(s,u) - \sum_{(v,s)}f(v,s)$, the net flow leaving the source.
+\end{defn}
+
+\begin{exer}
+In a maximal flow, no water flows into the source, $\displaystyle\sum_{(v,s)}f(v,s) = 0$
+\end{exer}
+
+WEIRD LINE 4
+
+(Aside): $g:[0,1[ \rightarrow ]0,\infty[, ~ g(x) = \frac{1}{x}$ has no maximum. However,
+
+\begin{thm}
+\emph{(Bolzano-Weierstrass)\footnote{used for one proof in this course}:} If $S$ is a closed, bounded subset of $\mathbb{R}^k, ~k\geq 1$, and $g:S\rightarrow \mathbb{R}$ is continuous, then $g$ achieves its maximum; $\exists ~x \in S$ s.t. $\forall g \in S,~ g(x)\geq g(y)$
+\end{thm}
+
+\begin{lem}
+\label{network-maxflow}
+In every network $(D,s,t,c)~ \exists$ a maximum flow.
+\end{lem}
+
+\begin{proof}
+Write $\overrightarrow{E} = (e_1, e_2, \ldots, e_k)$, let $S = \{(f(e_1),f(e_2), \ldots, f(e_k))~|~f$ is a flow in $(D,s,t,c)\}$.  $S$ is a closed, bounded subset of $\mathbb{R}$, and $val()$ is a continuous function from $S \rightarrow \mathbb{R}$; so $val$ achieves its maximum, ie, $\exists ~g$ a flow s.t. $val(g) \geq val(f) ~ \forall$ flows $f$ GRAPH 4 
+\end{proof}
+
+
+%15/1/2010
+
+\section*{15/1/2010}
+
+Notes for assignment:
+\begin{itemize}
+ \item An \emph{edge cover} is a set of \emph{vertices}, not of edges. 
+
+\begin{figure}[H]
+\centering
+\input{xfig-xports/edgecover.pdf_t}
+\caption{{$\{w,x\}$} is a \emph{set containing one} element}
+\end{figure}
+
+%{$\{w,x\}$} is a \emph{set containing one} element.
+\item rephrased question 3, 4.
+\item for the question about Hall's theorem in infinite graphs, you will need infinite degree (but countable should suffice).
+\item work in groups of 2-3
+\item Summation notation
+\end{itemize}
+
+\begin{figure}[H]
+\input{xfig-xports/flow.pdf_t}
+
+\caption{An example flow $f((t,c))=1, ~f((c,t))=1,~f(e)=0$ for all the other edges $e$.}
+\end{figure}
+
+WEIRD LINE
+
+How can we bound the value of \emph{any} possible flow; ie, show an upper bound on $val(f)$ that will hold for \emph{any} flow $f$ we can define.
+
+\begin{figure}[H]
+ \input{xfig-xports/flow1.pdf_t}
+\caption{example with source flow 3}
+\end{figure}
+
+
+\begin{defn}
+If $(D,s,t,c)$ is a network and $A \subset V$ is a set of vertices, we write $E^+(A)$ for the set of edges with tail in $A$, head not in $A$, or equivilantly, $E^+(A)=\{(u,v) \in \overrightarrow{E} | u \in A, v \notin  A\}$.  If $s \in A, t \notin A$ then we call $A$ an $s-t$ separator and call $E^+(A)$ the $s-t$ cut determined by $A$.  The \emph{capacity} $c(A)$ of $A$ $\displaystyle\sum_{(u,v)\in E^+(A)} c(u,v)$
+\end{defn}
+
+\begin{lem}
+\label{val-cap}
+If $f$ is any flow in $D$, and $A$ is any $s-t$ separator, then $val(f) \leq cap(A)$.
+\end{lem}
+
+
+
+\begin{proof}
+Proof idea: \begin{enumerate}
+ \item The flow out of $s$ is the same as the net flow leaving $A$.
+\item All this flow must leave along edges in $E^+(A)$.
+\end{enumerate}
+
+Fix a flow $f$, and an $s-t$ separator $A$.  
+\begin{align*}
+val(f)=& \sum_{\{u|(s,u) \in \overrightarrow{E}\}} f(s,u) - \sum_{\{u|(u,s) \in \overrightarrow{E}\}} f(u,s)\\
+ =& \sum_{\{u|(s,u) \in \overrightarrow{E}\}} f(s,u) - \sum_{\{u|(u,s) \in \overrightarrow{E}\}} f(u,s) + \sum_{a \in A \setminus \{s\}} (\sum_{\{u|(a,u) \in \overrightarrow{E}\}}f(a,u)-\sum_{\{u|(u,a) \in \overrightarrow{E}\}} f(u,a)) \\
+ =& \sum_{a\in A} \sum_{\{u|(a,u) \in \overrightarrow{E}\}} f(a,u) - \sum_{a\in A} \sum_{\{u|(u,a) \in \overrightarrow{E}\}} f(u,a)
+\end{align*}
+
+%18/1/2010
+\section*{18/1/2010}
+
+GRAPH 1
+
+We now separate each of the double sums into arcs that have both endpoints in $A$, and those that do not.
+
+\begin{align*}
+=& \sum_{a\in A} \sum_{\{u \in A |(a,u) \in \overrightarrow{E}\}} f(a,u) + \sum_{a\in A} \sum_{ \{u \in V \setminus A |(a,u) \in \overrightarrow{E}\}} f(a,u)\\
+ &- \sum_{a\in A} \sum_{\{u \in A |(u,a) \in \overrightarrow{E}\}} f(u,a) - \sum_{a\in A} \sum_{\{u \in V \setminus A |(u,a) \in \overrightarrow{E}\}} f(u,a) \\
+=& \sum_{a\in A} \sum_{ \{u \in V \setminus A |(a,u) \in \overrightarrow{E}\}} f(a,u) - \sum_{a\in A} \sum_{\{u \in V \setminus A |(u,a) \in \overrightarrow{E}\}} f(u,a) \\
+=&  \sum_{(v,w) \in E^+(A)} f(v,w) - \sum_{a\in A} \sum_{\{u \in V \setminus A |(u,a) \in \overrightarrow{E}\}} f(u,a)\\
+ \leq& \sum_{(v,w) \in E^+(A)} c(v,w) - \sum_{a\in A} \sum_{\{u \in V \setminus A |(u,a) \in \overrightarrow{E}\}} f(u,a)  \\
+=& cap(A) - \sum_{a\in A} \sum_{\{u \in V \setminus A |(u,a) \in \overrightarrow{E}\}} f(u,a) \\
+ \leq& cap(A)
+\end{align*}
+\end{proof}
+
+\begin{cor}
+\label{valg}
+If $f$ is a flow in $D$, $A$ is an $s-t$ separator, and $val(f)=cap(A)$.  Then $f$ is a max flow, ie, $\forall$ flows $g \in D$, $val(g) \leq val(f)$.
+\end{cor}
+
+\begin{proof}
+Take any flow $g$ in $D$. By Lemma~\ref{val-cap}, $val(g) \leq cap(A) = val(f)$
+\end{proof}
+
+\subsection*{Augmenting paths for flows}
+
+\begin{defn}
+Let $(D,s,t,c)$ be a network, let $f$ be a flow in $D$.  A path $P=v_0 v_1, \ldots, v_k$ is \emph{f-augmenting to $v_k$} if $v_0 = s$ and for each $i=0,1, \ldots, {k-1}$ 
+\begin{enumerate}
+ \item if $(v_i, v_{i+1}) \in \overrightarrow{E}$ then $f(v_i, v_{i+1}) < c(v_i,v_{i+1}$
+\item if $(v_{i+1}, v_i) \in \overrightarrow{E}$ then $f(v_{i+1}, v_i) >0 $
+\end{enumerate}
+\end{defn}
+
+\begin{examp}
+GRAPH 2 
+\end{examp}
+
+\begin{exer}
+For the example given in class, start from the all-zero flow and use augmenting paths three times to find a flow of value 3. 
+\end{exer}
+
+LINE??
+
+Note: \begin{itemize}
+ \item  if $u_k = t$, then we simply say that $P$ is f-augmenting
+\item We do not require paths to respect the direction of arcs
+\end{itemize}
+
+\begin{lem}
+\label{maxflow}
+A flow $f$ is maximum  $\iff$ There are no f-augmenting paths
+\end{lem}
+
+Proof idea: \begin{itemize}
+ \item Either find an f-augmenting path 
+\item or find a separator $A_f$ with $val(f) = cap(A_f)$
+\end{itemize}
+
+%20/1/2010
+\section*{20/1/2010}
+\begin{defn}
+(Augmenting paths, alternate): $(D,s,t,c)$ network, $f$ a flow, $P=v_0v_1,\ldots,v_k$ is f-augmenting to $v_k$ if 
+\begin{enumerate}
+ \item $f(e) <c(e)$ for ``forward'' edges $e$ of $P$
+\item $f(e) >0$ for ``backward'' edges $e$ of $P$
+\end{enumerate}
+\end{defn}
+
+\begin{proof}
+(of Lemma~\ref{maxflow}) Let $A_f = \{v_k \in V | \exists \textmd{ an f-augmenting path to }v_k\}$
+
+GRAPH 1-a,b (ask david)
+
+Two cases:
+\begin{enumerate}
+ \item[$t\in A_f$:] Then $\exists$ an f-augmentin gpath $P=v_0v_1,\ldots,v_k$, $v_0=s, v_k=t$.  Let 
+\begin{align*}
+\epsilon_1(P)&=min\{c(v_i,v_{i+1}) - f(v_i,v_{i+1})| i=0,\ldots,k-1, (v_i, v_{i+1}) \in \overrightarrow{E}\} \\ \epsilon_2(P) &= min\{f(v_{i+1},v_i) | i=0,\ldots,k-1, (v_{i+1},v_i) \in \overrightarrow{E}\}\\ \epsilon(P) &= min (\epsilon_1(P), \epsilon_2(P)) >0.
+\end{align*}  Define a new flow $f'$ by
+\[f'(e) = \left\{
+\begin{array}{l}
+f(e) \textmd{ if $e$ is not an edge of $P$} \\
+f(e) + \epsilon \textmd{ if $e$ is a forward edge of $P$} \\
+f(e) - \epsilon \textmd{ if $e$ is a backward edge of $P$}
+\end{array} \right. \]
+GRAPH 2
+\item[ $ t \notin A_f$:] Then $A_f$ is an $s-t$ separator.
+GRAPH 3
+\begin{itemize}
+ \item For all $e = (u,v) \in \overrightarrow{E}$, $u \in A_f$, $v \notin A_f$, $f(u,v)=c(u,v)$
+\item For all $e = (w,x) \in \overrightarrow{E}$, $w \notin A_f$, $x \in A_f$, $f(w,x)=0$
+\end{itemize}
+We know (from proof of Lemma~\ref{val-cap}), that
+\begin{align*}
+val(f) &= \displaystyle\sum_{\{(u,v) \in \overrightarrow{E}, u \in A_f, v \notin A_f\}} \overbrace{f(u,v)}^{c(u,v)} - \underbrace{\sum_{\{(w,x) \in \overrightarrow{E}, x \in A_f, w \notin A_f\}} f(w,x)}_{0} \\ 
+&= \sum_{(u,v) \in \overrightarrow{E}(A_f)} c(u,v) \\
+ &= cap(A_f).
+\end{align*}  
+\end{enumerate}
+By corollary~\ref{valg}, $f$ is therefore a max flow.
+\end{proof}
+
+\begin{thm}
+\emph{(Max-flow, min-cut theorem):} If $(D,s,t,c)$ is a network, then the value of a max flow equals the capacity of a min separator (cut).
+\end{thm}
+
+\begin{proof}
+Let $f$ be a max flow (exists by Lemma~\ref{network-maxflow}), let $A_f$ be as in Lemma~\ref{maxflow}.  $A_f$ is an $s-t$ separator, $val(f) = cap(A_f)$.  But, by Lemma~\ref{val-cap}, for \emph{any} $s-t$ separator $A$, $cap(A_f)=val(f) \leq cap(A)$.  So $A_f$ is a min separator.
+\end{proof}
+
+\begin{thm}
+\emph{(Flow integrality theorem):} If $(D,s,t,c)$ is a network and all edge capacities are integers, then there exists a max flow which is integer valued.
+\end{thm}
+
+GRAPH 4
+
+\begin{proof}
+Start from all-zero flow.  Repeatedly apply procedure of Lemma~\ref{maxflow} (ie, change the flow along an augmenting path) until we acheive a max flow, this max flow will be integer valued.
+\end{proof}
+
+%22/1/2010
+\section*{22/1/2010}
+
+\begin{thm}
+\emph{(Flow-integrality thm):} $(D,s,tc)$, if $c: \overrightarrow{E} \rightarrow \mathbb{N}$, then $\exists$ a max-flow $f$ with $f: \overrightarrow{E} \rightarrow \mathbb{N}$
+\end{thm}
+
+\begin{defn}
+Two paths $P_1, P_2$ in a directed or undirected graph are vertex-disjoint if they have vertices in common; they are edge-disjoint if no edges in common.
+\end{defn}
+
+\begin{thm}
+\emph{(Menger's Theorem, Directed Version):} Let $D$ be a digraph with distinguished nodes $s,t$.  Then 
+\begin{enumerate}
+\item The maximum number of edge-disjoint directed\footnote{No backward edges} $s-t$ paths equals the minimum number of arcs whose deletion destroys all $s-t$ paths. (ref to GRAPH 1)
+\item If $(s,t) \notin \overrightarrow{E}$, then the maximum number of directed $s-t$ paths, vertex-disjoint (except for at $s$ and $t$) equals the minimum number of vertices whose removal destroys all directed $s-t$ paths (Here, not allowed to remove $s$ or $t$).
+\end{enumerate}
+\end{thm}
+
+GRAPH 1
+
+\begin{proof}
+\begin{enumerate}
+ \item Assign each arca  capacity of 1. ($c(e)=1 \forall e \in \overrightarrow{E}$), and let $f$ be a max flow in $(D,s,t,c)$,  let $k=val(f)$.  By max-flow, min-cut, $\exists$ an $s-t$ separator $A$ with $cap(A)=k$.  GRAPH 2.  Then $E^+(A)$ is the required collection of edges.  Now, let $E'=\{e \in \overrightarrow{E} | f(e)>0 \}$.  Then $E'$ consists precisely of $k$ edge-disjoint $s-t$ paths. Graph 3. (Note that by Flow Integrality thm, we can assume that $f(e)=1 \forall e \in E'$.) graph 4?(dont worry about 4, rule talk came in about here).
+\item (Idea) GRAPH 5a Given a digraph $D$, want to find a digraph $D'$ so that edge-disjoint paths in $D'$ correspond to vertex-disjoint paths in $D$.  Construct a new auxilary digraph $D'$ (Graph 5b) as follows: for each $v \in V$, let $v_T, v_H$ be vertices of $D'$ (except $s$ and $t$).  For each edge $(u,v) \in \overrightarrow{E}, u \neq s,t ~ v \neq s,t$, let $(u_H,v_T)$ be an edge of $D'$.  For each edge $(s,v) \in \overrightarrow{E}$ let $(s,v_T)$ be an edge of $D'$, for $(u,t) \in E'$, let $(u_H,t)$ be an edge of $D'$.
+\end{enumerate}
+\end{proof}
+
+Rule for building an $s-t$ path from within $E'$: \begin{enumerate}
+ \item Let $u_o = s, i =0$
+\item while $u_i \neq t$, chose $u_{i+1}$ s.t. $(u_i, u_{i+1}) \in E'$, $(u_i, u_{i+1})$ not already on the path.  Then let $i\leftarrow i+1$
+\item Delete this path and repeat
+\end{enumerate}
+
+%25/1/2010
+\section*{25/1/2010}
+
+Reduciton of (2) to (1) (Menger's Theorem): Given $D(V,\overrightarrow{E})$, define $D'=(V',E')$ as follows.  
+\begin{align*}V' &= \{s\} \cup \{t\} \cup \displaystyle \bigcup_{v \ in V\setminus \{s,t\}} \{v_T, v_H\}, \\ 
+E' &= ( \displaystyle\bigcup_{\substack{(u,v) \in \overrightarrow{E} \\ u \neq s,t,~v \neq s,t}} \{(u_H,v_T)\}
+) \cup \{(s,u_T) | (s,u) \in \overrightarrow{E}\}  \\
+&\cup \{(u_H,s) | (u,s) \in \overrightarrow{E}\} \cup \{(t,u_T) | (t,u) \in \overrightarrow{E}\}\\
+&\cup \{(u_H,t) | (u,t) \in \overrightarrow{E}\} \cup \bigcup_{v \in V \setminus \{s,t\}} \{(v_T,v_H)\}
+\end{align*}
+LINE
+
+For any directed $s-t$ path $P=\underbrace{u_0}_{s}, u_1, \ldots, u_{m-1}, \underbrace{u_m}_t$ in $D$, there is an associated path $P'= s, u_{1,T}, u_{1,H}, u_{2,T}, \ldots, u_{m-1,T}, u_{m-1,H},t$.  $P$ uniquely determines $P'$, and vice-versa.  Let $P_1', \ldots, P_k'$ be a maximum collection of edge-disjoint $s-t$ paths in $D'$; then $P_1', \ldots, P_k'$ are \emph{also} vertex disjoint (excluding $s,t$).
+
+GRAPH 1
+
+It follows that writing $P_i$ for the unique $s-t$ path in $D$ corresponding to $P_i'$, (for each $i=1,\ldots,k$) the paths $P_1,\ldots,P_k$ are vertex-disjoint (excluding $s,t$).  It follows that to disconnect $s$ from $t$ in $D$, must remove at least one vertex from each of $P_1, \ldots, P_k$ so at least $k$ vertices in total.  
+
+Now let $E_{min} = \{e_1, \ldots, e_k\} \subset E'$ be such that the removal of $e_1, \ldots, e_k$ from $D'$ disconnects $s$ from $t$.  If $e \in E_{min}$ with $e_i= (u_h,v_T)$, then replace $e_i$ by $(u_T,v_H)=e_i'$
+
+Graph 2
+
+Any path through $e$ also passes through the new set $\{e_1, \ldots, e_{i-1}, e_i', e_{i+1}, \ldots, e_k\}$ also disconnects $s$ from $t$.  Similarly, if $e_i =(s,v_T)$ then we may replace $e_i$ by $e_i'=(v_T, v_H)$ and $\{e_1, \ldots, e_{i-1}, e_i', e_{i+1}, \ldots, e_k\}$ will still disconnect $s$ from $t$.
+
+Making all such replacements, we obtain a set $E^*=\{(v_{1,T}, v_{1,H}), \ldots,( v_{k,T}, v_{k,H} )\}$ which disconnnects $s$ from $t$.  For any $s-t$ path $P$ in $D$, the corresponding path $P'$ in $D'$ contains some edge $(v_{i,T}, v_{i,H})$ of $E^*$.  It follows that $v_i$ is a vertex of $P$. Therefore, $\{v_1, \ldots, v_k\}$ disconnects $s$ from $t$ in $D$.  This establishes (2).
+
+\begin{thm}
+\emph{(Undirected Menger's Theorem)} $G=(V,E)$ undirected graph with distinguished points $s,t$.
+
+\begin{enumerate}
+ \item (Edge version)  The max number of edge-disjoint $s-t$ paths is equal to the min number of edges whose removal destroys all $s-t$ paths.
+\item (Vertex version) If $\{s,t \} \notin E$ then the maximum number of vertex-disjoint $s-t$ paths (except at $s,t$) is equal to the min number of vertices whose removal destroys all $s-t$ paths. (Not allowed to remove $s$ or $t$)
+\end{enumerate}
+\end{thm}
+
+\subsection*{Planar Graphs}
+$G=(V,E)$ a graph.  An \emph{embedding} of $G$ in the plane is just a \emph{drawing} of $G$:
+\begin{itemize}
+ \item vertices $v \in V \rightarrow$ poins in $\mathbb{R}^2$,
+\item edges $\underbrace{e}_{\{u,v\}} \in E \rightarrow$ paths from $u$ to $v$.
+\item  $f:[0,1]\rightarrow \mathbb{R}^2$ continuous, $f(0)=u, f(1)=v, \forall x \in (0,1)$, $f(x)$ is not a ``vertex point''.
+\end{itemize}
+
+GRAPH 3
+
+\begin{defn}
+A graph $G$ is \emph{planar} if it has an embedding s.t. no two edges cross.
+\end{defn}
+
+%27/1/2010
+\section*{27/1/2010}
+
+\subsection*{Graph Colouring}
+
+\begin{rec}
+$G=(V,E)$, a colouring (vertex colouring) of $G$ is just a function \[c:G\rightarrow \mathbb{N}\]  We say $c$ is \emph{proper} if $\forall \{u,v\} \in E$, $c(u) \neq c(v)$,  The chromatic number $\chi(G)$ is the least number of colours needed in a proper colouring of $G$.
+\end{rec}
+
+\begin{examp}
+GRAPH 1
+\end{examp}
+
+\begin{thm}
+\emph{(4 colour theorem)\footnote{Appel and Hakin prooved it}} If $G$ is planar, then $\chi(G)\leq 4$
+\end{thm}
+
+\subsubsection*{Small chromatic numbers}
+\begin{enumerate}
+\item $\chi(G)=1 \iff G$ has no edges.
+\item $\chi(G)=2 \iff G$ has $\geq 1$ edge and no odd cycles
+
+
+\begin{proof}
+\begin{itemize}
+ \item[($\Rightarrow$)] Suppose $\chi(G)=2$ and $f$ is a proper colouring with 2 colours.  Clearly $G$ has $\geq 1$ edge.  Suppose that $G$ contained an odd cycle $C=v_0 v_1 \ldots v_{2k}v_0$.  Then $c(v_0) = c(v_2) = c(v_4)=\ldots=c(v_{2k})$.  But $\{v_{2k},v_0\} \in E$, so the colouring is not in fact proper
+\item[($\Leftarrow$)] Suppose $G$ has no odd cycles. 
+\begin{itemize}
+ \item[Aim:]  Construct a 2-colouring
+\item[Method:] Fix any vertex $v \in V$
+\end{itemize}
+For all $w \in V$, let $d(v,w)=$ distance from $v$ to $w=$ number of edges in a shortest length path from $v$ to $w$. (Eg, $d(v,v)=0$, and if $w \in N(v)$, then $d(v,w)=1$).  Let $w \in V_1$ if $d(v,w)$ is odd, $w \in V_2$ if $d(v,w)$ is even $\forall w \in V$.
+
+As long as no edges within $V_1$ or $V_2$, can set \[c(w) = \left\{\begin{array}{l l}
+                                                                    1 & \textmd{if } w \in V_1 \\
+2 & \textmd{if } w \in V_2,
+                                                                   \end{array}
+\right.\]
+to obtain a proper colouring.
+
+Fix $x,y \in V_2 $, suppose $x,y$ were adjacent. Let $P_x = \overbrace{u_0}^v, u_1, \ldots, \overbrace{u_k}^x$, $P_y = \underbrace{v_0}_v, v_1, \ldots, \underbrace{v_l}_y$.  By altering the paths if necessary, we can assume that $P_x$, $P_y$ travel along together for some time, then split for good.  Write $u_i = v_i$ for the last comon element of $P_x$,$P_y$.
+GRAPH 2
+Let, $P_x' = v_i, v_{i+1}, \ldots, v_k$, $P_y' = v_i, v_{i+1}, \ldots, v_l$.  then $(k-i)$, $(l-i)$ have the same parity, so $(k-i) + (l-i)$ is even.  It follow sthat \[C=\overbrace{u_k}^y, u_{k-1}, \ldots, \overbrace{u_i}^{v_i}, v_{i+1}, \ldots, \overbrace{v_l}^x, \overbrace{u_k}^y\] is an odd cycle, contradicting our hypothesis.
+\end{itemize}
+\end{proof}
+
+(Aside): This proof is \emph{constructive}, it is easy to determine distances of all vertices to a fixed vertex $v$, and this gives us a 2-colouring if one exists.
+\item $\chi(G)$, No easy characterization of such graphs. (Deciding if an arbitrary graph $G$ has $\chi(G) = 3$ is $NP$-complete.)
+\end{enumerate}
+
+LINE?
+
+\subsubsection*{Bounding $\chi(G)$}
+Lower bound: Write $\omega(G)$ for the size of the largest clique\footnote{$K_n$: clique of size $n$: $n$ vertices, all possible edges} in $G$.  Then $\chi(G) \geq \omega(G)$, since each vertex of a cique must recieve a different colour.
+
+If $G=K_n$ then $\chi(G) = \omega(G)=n$, but for example GRAPH 3 
+
+Upper bound: let $\Delta(G)=max(v\in V | deg(v))$.
+\begin{prop}
+$\chi(G) \leq \Delta(G)+1$ for all $G$. (Aside: If $G = K_n, \chi(G) = n =\Delta(G)+1$.)
+\end{prop}
+
+
+
+\begin{proof}
+
+
+Induction on $n = |V|$.
+\begin{enumerate}
+ \item[Base case:] $|V|=\Delta(G)+1$; give each vertex a different colour\footnote{Originally written as: $n = \Delta(G)+1$, in this case $G= K_n$ so $\chi(G) = n = \Delta(G)+1$ as needed.}.
+\item[Inductive step:] Suppose true for all $G$ with $|V|\leq n$, fix $G$ with $|V|=n+1$.  Fix $v\in V$, and consider the induced subgraph $G' = G[V \setminus \{v\}]$ GRAPH 4	$|V\setminus \{v\}| = n$, so by induction there exists a ($\Delta(G')+1$)-colouring of $G'$.  Fix one such colouring $c'$, $v$ has $|N(v)| = deg(v) \leq \Delta(G)$ But we have $\Delta(G)+1$ availabe colours.  So some colour must not appear on $N(v)$.  Give $v$ this remaining colour to obtain a proper colouring of $G$
+\end{enumerate}
+\end{proof}
+
+Idea (of proof): Colour the vertices one-by-one in any order.  When we come to a vertex, use a colour that doesn't appear on any of its already coloured neighbours. (This works since we are allowing ourselves $\Delta(G) +1$ colours and there are never more than $\Delta(G)$ different colours on already coloured neighbours.)
+
+%29/1/2010
+\section*{29/1/2010}
+
+
+\begin{defn}
+$G$ graph, wrtie $col(G)=max\{W\subseteq V| \textmd{ min degree of a vertex in }G[W]\}$ EXAMPLE GRAPH 1. For this graph, $col(G)=1$.
+\end{defn}
+
+\begin{thm}
+$G$ graph, then $\chi(G) \leq col(G)+1$.
+\end{thm}
+
+\begin{proof}
+Find a vertex in $G$ with degree $\leq col(G)$; call it $v$.  Let $G' =G[V \setminus \{v\}$.  $col(G') \leq col(G)$.  By induction, can colour $G'$ with $\leq col(G') +1$ colours.  Finish by colouring $v$ with one of $col(G)+1$ colours; can do this since $v$ has $\leq col(G)$ neighbours in $G$.
+\end{proof}
+
+LINE?
+
+ Colouring:
+\begin{itemize}
+ \item $\chi(G) \geq \omega(G)$
+\item $\chi(G) \leq \Delta(G)+1$
+\item $\chi(G) \leq col(G)+1$
+\end{itemize}
+
+\begin{defn}
+We say $S \subset V$ is a \emph{stable set} if $G[S]$ has no edges.  GRAPH 2.
+\end{defn}
+
+\begin{rem}
+If $c: V \rightarrow \mathbb{N}$ is a proper colouring then $c^{-1}(\{k\})=\{v \in V | c(v) = k\}$ is a stable set for all $k \in \mathbb{N}$.   Write $\alpha(G)$ for the size of a largest stable set in $G$.
+\end{rem}
+
+\begin{prop}
+$\chi(G) \geq \lceil\frac{|V|}{\alpha(G)} \rceil$
+\end{prop}
+
+\begin{proof}
+\begin{align*}
+V =& \bigcup_{k \in \mathbb{N}} c^{-1}(\{k\}) \\
+|V| = & \sum_{k=\mathbb{N}} |c^{-1}(\{k\})| \leq \sum_{\substack{k \in \mathbb{N} \\ c^{-1}(\{k\}) \neq \emptyset}} \alpha(G) = \alpha(G) \cdot \textmd{ number of colours used}.
+\end{align*}
+so, $|V| \leq \alpha(G) \cdot$ number of colours used; rearranging we get: number of colours used $\geq \lceil \frac{|V|}{\alpha(G)} \rceil$.  This holds for any proper colouring $c$, and so $\chi(G) \geq \lceil \frac{|V|}{\alpha(G)} \rceil$.
+\end{proof}
+
+\subsection*{Edge Colouring}
+
+\begin{rec}
+An edge colouring of $G=(V,E)$ is a function $c:E \rightarrow \mathbb{N}$.  It is \emph{proper} if for all distinct $e$, $e' \in E$, with $e=\{u,v\}, e'=\{v,w\}, c(e) \neq c(e')$.  Graph 3.
+\end{rec}
+
+The edge chromatic number $\chi'(G)$ is the least number of colours in a proper colouring of $G$.
+
+Lower bound: $\chi'(G) \geq \Delta(G)$.  Fix $v$ with $deg(v) = \Delta(G)$.  GRAPH 4.
+
+Upper bound: $\chi'(G) \leq 2 \Delta(G)-1$.  The reason being that no edge touches more than $2(\Delta(G)-1)$ other edges GRAPH 5.  Thus, we can colour with $2 (\Delta(G)-1) +1$ colours in an arbitrary order; when we colour an edge $e$, there will always be some colour not appearing on any of the edges it touches.
+
+%1/2/2010
+\section*{1/2/2010}
+Proper edge colouring $\chi'(G)=\min\{k| G \text{ has a proper k-edge colouring}\}$
+
+graph 1 -- $\chi'(C_5)=3$
+
+\begin{rem}
+\begin{enumerate}
+\item Equivalently, $\chi'(G)$ is minimum k s.t. $E(G)$ can be partitioned into $K$ matchings.
+
+$L(G)$ Line graph has equivalent vertex representing each edge of $G$ with $e \notin f$ adjacent if $e \notin f$ share a common vertex in $G$
+
+graph 2, 3
+
+\item $\chi'(G)=\chi(L(G))$, $\Delta(G) \le \chi'(G) = \chi(L(G)) \le 2\Delta(G)-1$, $\Delta(L(G)) \le 2\Delta(G) -2$ , $\chi(H) \le \Delta(H) +1$
+\end{enumerate}
+\end{rem}
+
+\begin{prop}
+Let $G$ be a bipartite graph $\Rightarrow \chi'(G) = \Delta(G)$
+\end{prop}
+
+\begin{thm}
+\emph{(Vizing):}  Let $G$ be a graph of maximum degree $\Delta \Rightarrow \chi'(G)$ is either $\Delta$ or $\Delta +1$.
+\end{thm}
+
+\begin{proof}
+Lower bound is trivial, so just need to prove $exists$ colouring with $\Delta+1$ colours.
+
+Let $k = \Delta(G)+1$.  We prove by induction on $|V(G)|$ that has a proper k-edge colouring.  Trivial if $|V(G)|=1$.
+
+\begin{lem}
+\label{k-edge}
+\begin{itemize}
+\item Let $G$ be a graph with $\Delta(G) \le k$
+\item let $v$ be a vertex of $G$ and $e_1, \dots, e_v$ edges of $G$G incident to $v$
+\item Suppose $G - \{e_1,\dots,e_v\}$ has a proper k-edge colouring in which each of $e_1,\dots,e_v$ has a colour available and all but one has two such colours $\Rightarrow G$ has a proper k-edge colouring
+
+GRAPH 4
+\end{itemize}
+\end{lem}
+
+Take $v \in V(G)$, consider $G-v$. By induction hypothesis, $G-v$ has a proper k-edge colouring
+
+As $\Delta(G) = k-1$, each edge that meets $v$ has at most  $k-2$ colours availabe.  Let $e_1, \dots,e_v$ be the edges of $G$ incident to $v$.  Each has at least two colours available, so by lemma \ref{k-dege} $G$ has a proper k-edge colouring.
+
+\begin{proof}
+Induction on $v$.  Base case, $v=1$ checks GRAPH 5
+
+Let $G- \{e_1, \dots, e_v \}$ be k-edge coloured.  Let $C_i$ be set of colours available for $e_i$ for each $i=1, \dots,r$.  WLOG we may assume $|c_i| \ge 2 ~ i = 2, \dots, r$  and $|c_1| \ge 1$.
+
+Let $c_i' \le c_i$ for $i = 1, \dots, r$ be s.t. $|c_1'| =1$  and $|c_i'|=2 ~ i = 2, \dots, r$.
+
+\begin{itemize}
+\item[Case 1:] If there is a colour $c$ used in only one of the sets $c_i$, then colour $e_i$ with colour $c$ and we're done by induction. 
+\item[Case 2:] Let $c$ be the set of colours used in sets $c_i', i=1, \dots, r$.  ie, $C=\displaystyle \bigcup_{i=1}^r c_i$.  Then each element of $c$ occurs in at least two $c_i'$.  So $2|c| \le 2r-1 \Rightarrow |c| \le r-1$
+\end{itemize}
+
+
+
+
+%3/2/2010
+\section*{3/2/2010}
+\begin{thm}
+\emph{(Vizing)} $\chi'(G)$ is either $\Delta(G)$ or $\Delta(G)+1$.
+\end{thm}
+
+\begin{lem}
+Let $G$ be a graph with $\Delta(G) \leq k$, $v$ a vertex of $G$ and $e_1, \ldots, e_r$ edges incident to $v$.  If there is a proper k-edge-colouring of $G-\{e_1,\ldots,e_r\}$ such that each of $e_1,\ldots,e_r$ has a colour available\footnote{Colour $c$ is available for an edge $e$ if it is not used on any edge sharing a vertex with $e$.} and all but one has two such colours, then $G$ has a proper k-edge-colouring.
+\end{lem}
+
+\[\begin{array}{ll}
+C_1,\ldots,C_r  & |C_1'|=1 \\
+C_1',\ldots,C_r' & |C_i'| =2  \\
+& i = 2,\ldots, r
+\end{array}\]
+$C_i=\{\textmd{colours available for } e_i\}$.  We may assume Every colour in $C=\displaystyle \bigcup_{i=1}^r C_i'$ is used at least twice.  
+
+\begin{align*}
+2|C| \leq& 2r-1 \\
+|C| \leq& r-\frac{1}{2}\\
+|C| \leq & r-1
+\end{align*}
+
+
+$d(v) \leq \Delta(G) \leq k$ At most $k-r$ coloured edges incident to $v$.  There are at least $r$ colours not used on edges incident to $v$.  So there is one such colour $c$ such that $c \notin C$.  Let $c'$ be the element of $C_1'$.  Consider the matching $m$ of edges of colour $c$. Let $m'$ be matching of ????.
+
+Consider $m \cup m'$.  Each component is either a path or a cycle. Define $v_1$ be $e_1 = vv_1$.   Since $v_1$ has degree $\leq 1$ in $m \cup m'$, its component is a path.  As neither $c$ nor $c'$ occur on edge incident to $v$, this path does not meet $v$.
+
+Flip th ecolouring on $P$ colour $e_1$ with $c$.  Since flipping the colours $P$ can worst reduce by one the number of colours available for one of $e_2,\ldots,e_r$.  We are done by I.H.
+\end{proof}
+\end{proof}
+
+
+Fact: $\chi(G) \leq \Delta(G) +1$.  Equality holds if $G$ is complete ($G = K_n$, $\chi(G) = n$, $\Delta(G) = n-1$) or odd cycle   ($G=C_{2k+1} $, $\chi(G)=3$, $\Delta(G)=2$).
+
+\begin{thm}
+\emph{(Brooks):} Let $G$ be a connected graph that is not complete or an odd cycle.  Then $\chi(G) \leq \Delta(G)$.
+
+or
+
+If $G=(V,E)$ has $|V|=n$ , and $G$ is not $K_n$, $G$ is not an odd cycle $C_N=C_{2m+1}$, then $\chi(G) \leq \Delta(G)$.
+\end{thm}
+
+$K_n: \Delta(G) = n-1$, $\chi(G)=n$.
+
+$C_{2m+1} = \Delta(G) =2$, $\chi(G)=3$
+
+\begin{proof}
+(Brooks)
+
+Trivial if $\Delta(G)=0,1,2$.  Assume $\Delta(G) \geq 3$. We work by induction on $|V(G)|$.
+
+\begin{itemize}
+ \item[Case 1] $\exists v \in V(G)$, $d(v) < \Delta(G)$.  Then colour $G - \{v\}$ by I.H.  Colour $v$ with an available colour.  
+\item[Case 2] Can assume $G$ regular of degree $\Delta$.  If $\exists x \in V(G)$ s.t. $G-x$ is disconnected, then can colour each component   Let components of $G-x$ by $c_1, \ldots, c_r$ can colour $G[c_i \cup \{x\}]$ with $\Delta$-colours for each $i=c_2,\ldots, r$ by I.H.  By permuting colours if necessary we may assume $x$ gets colour 1 in all colouring.  Putting these together gives a colouring of $G$.  Now assume $G-x$ connected but $\exists u,v$ such that $G-\{u,v\}$ is disconnected.  If, in each component one of $u,v$ has at most $\Delta(G)-2$ neighbours then for each component $c$ can colour $G[c \cup \{u,v\}]$ such that $u$ and $v$ get different colours.  Putting these colourings together, using perutations if necessary gives $\Delta$-colouring of $G$.
+
+Otherwise, there is a component in which both $u$ and $v$ have $\Delta(G) -1$ neighbours.  Then each can only have one neighbour in each component.  Say $u'$ neighbourhood of $u$ and $v'$ of $v$.  Can apply previous approach with $u$ and $v'$.
+\end{itemize}
+
+%5/2/2010
+\section*{5/2/2010}
+
+
+(Continued  Proof)
+
+\begin{align*}
+\Delta=0 & \quad G=K_1 \\
+ \Delta=1 & \quad G=K_2 \\
+\Delta=2    & \quad G \text{ is a path }\rightarrow \chi(G)=2\\
+& \quad G \text{ is an even cycle} \rightarrow \chi(G)=2 \\
+& \quad G \text{ is an odd cycle} \rightarrow \chi(G)=3 \\
+\end{align*}
+
+$\Delta \geq 3$, start an induction on $n=|V|$; more special cases.  Base cases $n=1,2$ already covered so can assume $n >2$.
+
+$G$ has a one-node cut: Induction GRAPH 1
+
+$G$ has a 2-node cut: Induction GRAPH 2
+
+$G$ has no 2-node cut: In other words, the removal of any two vertices leaves the graph connected: ie, $\forall ~ u,v \in V, u \neq v, ~G[V\setminus \{u,v\}]$ is connected.  Graph 3
+
+LINE (solid)
+
+Fix a vertex $w \in V$ of maximal degree: $deg(w)= \Delta(G)$ Graph 4 
+
+If all vertices $u,v \in N(w)$ are joined by edges, then $G[w \cup N(w)]= K_{\Delta(G)+1}$.  In this case $G = K_{\Delta(G)+1}$.  Now assume $\exists u,v \in N(w)$ such that $\{u,v\} \neq E$, ie, $u$ and $v$ are not joined by an edge.  Since $G$ has no 2-node cut, $G'=G[V \setminus \{u,v\}]$ is connected.
+
+Idea: First colour $u,v$ the same. Next colour remaining vertices according to their distance from $w$: further away vertices get coloured sooner.  Finally colour $w$. 
+
+Graph 5 (of Idea)
+
+Let $w = w_0$,
+\begin{align*}
+N_{G'}(w) =& \{w_1, \ldots, w_{n_1} \}& n_1 = |N_{G'}(w)| \\
+N_{G'}^2(w) =& \{w_{n_1+1}, \ldots, w_{n_1+ n_2} \} & n_2 = |N_{G'}^2(w)|\\
+\vdots \\
+N_{G'}^k(w) =& \{w_{n_1+\ldots + n_{k-1}+1}, \ldots, \underbrace{w_{n_1+ \ldots + n_k}}_{n-3} \} & n_k = |N_{G'}^k(w)|\\
+\end{align*}
+
+GRAPH 6
+
+For all $i=1, \ldots, k$, every vertex $x$ $ N_{G'}^i(w)$ has at least one neighbour preceding it in the sequence $w_0,\ldots, w_{n-3}$.
+
+Grpah 7
+
+ Now colour vertices $w_{n-3}, \ldots, w_1$ in that order.  When we get to a vertex $x \in N_{G'}^i(w)$, $x$ has at least one uncoloured neighbour, so the number of colours appearing on $N_G(x)$ is at most $deg(x)-1 \leq \Delta(G)-1$.  So there is an unused colour for $x$.
+
+Now colour $w$.  All $w$'s neighbours are coloured, but 2 of them receive the same colour $(u,v)$.  So at most $\Delta(G)-1$ \emph{distinct} colours appear on vertices in $N(w)$, and so there is a colour available for $w$.   This completes the proof. 
+\end{proof}
+
+%8/2/2010
+\section*{8/2/2010}
+
+
+\begin{thm}
+\emph{(K\"onig's Theorem)} If $G$ is bipartite, then $\chi'(G)=\Delta(G)$.
+\end{thm}
+
+\begin{proof}
+For any graph $\chi'(G) \geq \Delta(G)$, GRAPH 1 $deg(w) = \Delta(G)$.  Need to show $\chi'(G)\leq \Delta(G)$.
+\begin{enumerate}
+\item[Case 1: ] $G=(V,E)$ is a \emph{regular} graph: $deg(w)=\Delta(G)$ for all vertices $w$.  In this case, show by induction that $E$ can be partitioned into $\Delta(G)$ disjoint perfect matchings.  Thus $\chi'(G) \leq \Delta(G)$.
+\item[Case 2: ]  Defin $\delta(G) = min\{ deg(w) | w \in W\}$.  Suppose $\delta(G) = \Delta(G)-1$ GRAPH 2 
+Make a second copy $G'=(V',E')$ of $G$, $V' = V_1' \cup V_2'$
+GRAPH 2 MOD
+For each $v \in V_1$,  with $deg(v) =\Delta(G)-1$, add an edge between $v$ and $v'$.  Simlarly, for each $w \in V_2$ with $deg(w) = \Delta(G)-1$, add an edge wetween $w$ and $w'$.
+
+Call the resulting graph $H = (V^*, E^*)$.  For all $x \in V^*$, $deg_H(x) = \Delta(G) = \Delta(H)$.  By case 1, we can write $E^* = M_1^* \cup M_2^* \cup \ldots \cup M_{\Delta(G)}^*$, where $M_1^*, \ldots, M_{\Delta(G)}^*$ are disjoint perfect matchings.
+
+For each $i = 1, \ldots, \Delta(G)$, $M_i = M_i^* \cap E$ is a matching in $G$.
+
+\begin{clm}
+$M_1, M_2, \ldots, M_{\Delta(G)}$ partition the edges of $G$. $M_1, M_2, \ldots, M_{\Delta(G)}$ are disjoint since $M_1^*, \ldots, M_{\Delta(G)}^*$ are disjoint.
+\end{clm}
+
+GRAPH 3
+
+\begin{proof}
+To see that $M_1, \ldots, M_{\Delta(G)}$ has $\displaystyle \bigcup_{i=1}^{\Delta(G)} M_i = E$, just note that for any edge $e \in E$, there is some $i \in \{1,\ldots, \Delta(G)\}$ such that $e \in M_i^*$, and so $e \in M_i$.
+\end{proof}
+
+Thus, $M_1, \ldots, M_{\Delta(G)}$ corresponds to an edge colouring of $G$ and so $\chi'(G) \leq \Delta(G)$
+
+\item[Case 3: ] General $G = (V,E)$ with $V = V_1 \cup V_2$.
+Graph 4
+
+Separate $V_1$ and $V_2$ into vertices of maximum degree ($V_1^{\Delta(G)}, V_2^{\Delta(G)}$) and the rest  ($V_1^{<\Delta(G)}, V_2^{<\Delta(G)}$)
+
+Now create a copy $G'$ of $G$ and join each vertex $v \in V_1^{<\Delta(G)} \cup V_2^{<\Delta(G)}$ to its copy $v'$ in $G'$.  This increases the minimum degree by 1.  Either repeat this ``copy procedure'' $\Delta(G) - \delta(G)$ times to get a graph $K$ with all degrees equal to $\Delta(G)$, then argue as in case 2.  Or, use induction on $\Delta(G) - \delta(G)$.
+\end{enumerate}
+\end{proof}
+
+\subsection*{Planar graphs}
+ $G= (V,E)$.  An \emph{embedding} of $G$ in the plane is just a drawing of $G$.  vertices $\rightarrow$ points of $\mathbb{R}^2$, edges $\rightarrow$ arcs connecting points.  The embedding is planar if no two edges cross.
+
+Formally, Function $f: V \hookrightarrow \mathbb{R}^2$ ($f$ injective, denoted by $\hookrightarrow$), for each $e\in E$, a function $g_e: [0,1] \rightarrow \mathbb{R}^2$, such that 
+\begin{enumerate}
+ \item $g_e$ is continuous
+\item $g_e(0)=u$, $g_e(1)=v$
+\item $\forall t \in (0,1)$, $g_e(t) \notin \displaystyle \bigcup_{v \in V} f(v)$.
+\end{enumerate}
+
+Examples: GRAPH 5a, 5b
+
+Formally, the embedding is planar if $\forall e, e' \in E ~\forall t, t \in (0,1)$, $g_e(t) \neq g_{e'}(t)$.  Intuitive argument that not all graphs are planar.  Take $K_5$ GRAPH 6
+\begin{itemize}
+\item Start by drawing $G[\{1,2,3\}]$.
+
+GRAPH 7
+\item Next add vertex 4: first try drawing it inside the triangle.
+
+GRAPH 8 
+
+\item If we put 5 inside $\triangle_{124}$ then we can't connect 5 to 3.  Similarly, can't put 5 in $\triangle_{134}$ or $\triangle_{234}$.  Same problem if we put 5 outside $\triangle_{123}$.
+\end{itemize}
+
+%10/2/2010
+\section*{10/2/2010}
+
+Last class: Studying planar graphs/embeddings $G=(V,E)$, $f: V \hookrightarrow \mathbb{R}^2$ draws the vertices. 
+
+$\forall ~ e \in E ~e=\{u,v\}$, $g_e:[0,1] \hookrightarrow \mathbb{R}^2$ draw the edges $g_e(0)=u, g_e(1)=v$.
+
+$\forall ~ e \neq e', ~\forall ~t, t'\in (0,1)$, $g_e(t) \neq g_e(t')$
+
+An \emph{arc} is an injective, continuous function $g:[0,1] \rightarrow \mathbb{R}$
+
+GRAPH 1AB
+
+A set $A \subseteq \mathbb{R}$ is \emph{connected} if $\forall x,y \in A~ x \neq y$, there is some arc $g:[0,1] \hookrightarrow \mathbb{R}^2$ with $g(0) = x, g(1)=y$.   Connected set $\longleftrightarrow$ Region
+
+\begin{examp}
+When we draw $K_4$ as it separates $\mathbb{R}^2$ into four regions GRAPH 2
+\begin{itemize}
+ \item Region inside $\triangle_{124}$
+\item Region inside $\triangle_{134}$
+\item Region inside $\triangle_{234}$
+\item Region outside $\triangle_{123}$
+\end{itemize}
+\end{examp}
+
+The regions arising from a planar embedding are called the \emph{faces} of the planar embedding
+
+Any \emph{circuit} $C=\overbrace{v_1,v_2}^{e_1}, \ldots, v_k v_1$ of $G$ gives a continuous function $f_C^*:[0,k] \rightarrow \mathbb{R}^2$, $f_C^*(t) = \{g_{e_i}(t-\lfloor t \rfloor) \text{ when } i-1 \leq t \leq i \}$, and $e_i=\{v_i, v_{i+1}\}$, $i<k$ $e_k=\{v_k, v_1\}$.  Let $f_C:[0,1] \rightarrow \mathbb{R}^2$ be given by $f_C(s)=f_C^*(k s)$.
+
+LINE??
+
+$C=123$
+
+\[f_C^*(t)=\left\{
+\begin{array}{ll}
+g_{\{1,2\}}(t- \lfloor t \rfloor ) ,& 0 \leq t <1 \\
+g_{\{2,3\}}(t- \lfloor t \rfloor ) ,& 1 \leq t <2 \\
+g_{\{3,1\}}(t- \lfloor t \rfloor ) ,& 2 \leq t <3 
+\end{array} \right.\]
+
+\begin{examp}
+GRAPH 3 GRAPH 4
+\end{examp}
+
+GRAPH 5
+
+\begin{rem}
+The faces are the maximal regions containing none of the points $\{f(v): v \in V\}$ and none of the points $\{g_e(t), e\in E, 0 \leq t \leq 1 \}$.
+\end{rem}
+
+\begin{rem}
+Can also draw graphs on other surfaces.  Ex: Drawing of $K_5$ on the torus
+
+GRAPH 6
+
+Ex: $K_{3,3}$ GRAPH 7  On a M\"obius strip 
+\end{rem}
+
+Key topological fact (which makes everything we have described work)
+
+\begin{defn}
+A \emph{Jordan curve}\footnote{simple closed curve} is a continuous function $f:[0,1] \rightarrow \mathbb{R}^2$ with $f(0)=f(1)$ but is injective except at its endpoints.
+\end{defn}
+
+Ex: If $C$ is a cycle then $f_C$ is a Jordan curve.
+
+\begin{thm}
+\emph{(Jordan curve theorem):} Any Jordan curve $f$ separates $\mathbb{R}^2$ into exactly two regions, one bounded, the other unbounded.
+\end{thm}
+
+We say a region $A$ is the \emph{region of a cycle} $C$ if it is one of the two regions obtained from $f_C$, and $A$ is a face of the graph.
+
+%12/2/2010
+\section*{12/2/2010}
+
+\begin{defn}
+A \emph{plane graph} is a planar graph $G=(V,E)$ together with an embedding of $G$.   We say two plane graphs are isomorphic if the embeddings have all the same faces. GRAPH 1 A B
+\end{defn}
+
+\begin{thm}
+\emph{Euler's Theorem:} If $G$ is a \emph{connected plane graph} with $n=|V|$, $=|E|$ and $f$ faces, then $n-m+f=2$.  In particular, the number of faces does not depend on the embedding.  Also holds for multigraphs.
+\end{thm}
+
+\begin{thm}
+\label{planegraph}
+If $G$ is a connected simple plane graph with $|V| \geq 3 $ then $|E| \leq 3|V| - 6$.  Furthermore, if $G$ is bipartite and $|V| \geq 4$ then $|E| \leq 2 |V| -4$.
+\end{thm}
+
+\begin{lem}
+\label{handshake}
+\emph{(Handshaking Lemma)} For any graph $G_1=(V,E)$ $\displaystyle \sum_{v \in V} deg(V) = 2|E|$.
+\end{lem}
+
+\begin{proof}
+Use the graph $D(G)= (V, \overrightarrow{E}), ~ |\overrightarrow{E}|=2|E|$.  Write $deg^+(v) = | \{ w| (v,w) \in \overrightarrow{E} \}|$; $deg^+(v) = deg(v)$. $2|E| = \displaystyle \sum_{v \in V} deg^+(v)= \sum_{v \in V} deg(v)$.
+\end{proof}
+
+\begin{proof}
+(of Theorem \ref{planegraph}) Aim: $|E| \leq 3 |V| -6$ GRAPH 2  We will first construct the \emph{facial (or planar) dual} of $G$.
+\begin{enumerate}
+ \item Put a dot in each face of $G$
+\item Each edge has two sides;  connect the dots on each side by a new edge passing through the old edge. (Do this so the resulting graph is planar, and each edge passes through \emph{only} one old edge).
+\end{enumerate}
+Call the result $F(G)=(V', E')$. Note: $|V'|=f$, the number of faces of $G$.  $|E'|=|E|$.  By the handshaking lemma, $\displaystyle \sum_{v' \in V'} deg(v') = 2|E'| = 2|E|$.  All degrees in $F(G)$ are $\geq 3$ since all faces in $G$ have $\geq 3$ edges.  $3 f= \displaystyle \sum_{v' \in V'}e \leq \sum_{v' \in V'} deg(v') = 2|E|$. But 
+\begin{align*}
+|V| - |E| + f &= 2 ~\text{, so} \\
+|V|-|E| + \frac{2}{3} |E| &\geq 2 \\
+|V| - \frac{|E|}{3} &\geq 2 \\
+ 3|V| -|E| &\geq 6
+\end{align*}
+
+If $G$ is bipartite then all faces of $G$ have $\geq 4$ edges, and so $4 f \leq 2 |E|$.  Therefore, $|V| - |E| + \frac{|E|}{2} \geq 2$ ie $2|V| - |E| \geq 4$.
+\end{proof}
+
+\begin{cor}
+Neither $K_5$ nor $K_{3,3}$ is planar.
+\end{cor}
+
+\begin{proof}
+$K_5 \rightarrow 5$ vertices, 10 edges.  $  3|V| - 6 = 15-6 = 9$.
+$K_{3,3} \rightarrow 6$ vertices, 9 edges.  $2|V| - 4 = 8$.
+\end{proof}
+
+\begin{defn}
+Given $G=(V,E)$ and edge $e = \{u,v\} \in E$ let $G\%e$ be the graph $G' = (V',E')$ with $V'= V \cup \{w\}$, $w$ a new vertex $E'=(E \setminus \{u,v\}) \cup \{ \{u,w\}, \{w,v\}\}$.  A graph $H$ is a subdivision of $G \iff H$ can be obtained from $G$ by repeated subdivisions.
+\end{defn}
+
+\begin{thm}
+\emph{Kuratowski's Theorem:} $G$ is planar $\iff$ it contains no subdivision of $K_5$ or of $K_{3,3}$
+\end{thm}
+
+\begin{rem}
+By subdividing $K_5$ even once, obtain a graph with $|E| \leq 3 |V| - 6$; this condition is \emph{necessary} but \emph{not sufficient} for planarity.
+\end{rem}
+
+\subsection*{List colouring}
+
+\begin{defn}
+Let $G=(V,E)$ and $\mathcal{L} = \{ L_v | v \in V \}$ be a collection of lists.  A proper colouring of $G$ from list $\mathcal{L}$ is a function $c: V \rightarrow \mathbb{N}$ such that
+\begin{enumerate}
+ \item $c$ is a proper colouring of $G$
+\item $\forall v \in V, c(v) \in L_v$
+\end{enumerate}
+The \emph{choice number} (\emph{list chromatic} number) of $G$ is the smallest $k$ s.t $\forall \mathcal{L} $ if $|L_v| \geq k$  then $\exists $ a proper colouring of $G$ from lists $\mathcal{L}$.  We write $ch(G)$ for the choice number. 
+\end{defn}
+
+Note: If $\chi(G)=k$ then let $L_v = \{1, \ldots, k-1\} \forall v \in V$.  Since $\chi(G) \geq k$, there is \emph{no} proper colouring of $G$ from lists $\mathcal{L}$, so $ch(G)\geq k$.
+GRAPH 3
+
+%15/2/2010
+\section*{15/2/2010}
+
+\subsection*{List colouring}
+
+\begin{rec}
+$G=(V,E)$, lists of colours $\mathcal{L}=(L_v, v \in V)$, $L_v \subset \mathbb{N}$.  $G$ has a proper colouring from lists $\mathcal{L}$ if $\exists c: V \rightarrow \mathbb{N}$ s.t.
+\begin{enumerate}
+ \item $c$ is a proper colouring of $G$
+\item For all $v \in V$, $c(v) \in L_v$
+\end{enumerate}
+
+The \emph{choice number} $ch(G)$ is the smallest  $k$ such that if $|L_v| \geq k$ for all $v \in V$, then $\exists$ a proper colouring from lists $\mathcal{L}$.
+\end{rec}
+
+\begin{rem}
+\begin{enumerate}
+ \item For any $G=(V,E), \exists$ lists $\mathcal{L}=(L_v, v\in V)$, with $|L_v|=1$ for all $v \in V$, such that there exists a proper colouring from lists $\mathcal{L}$.  Order $V$ as $v_1, v_2, \ldots, v_n$, and let $L_v = \{i\}$ for all $i=1,\ldots,n$
+\item If $\chi(G) \geq k$ then $ch(G)\geq k$.  $ch(G) \geq k \iff \exists \mathcal{L}=(L_v, v\in V)$ with $|L_v|=k-1$ for all $v \in V$, such that there is no proper colouring of $G$ from lists $\mathcal{L}$.
+\begin{proof}
+Suppose $\chi(G) \geq k$. Then there is no proper colouring of $G$ with colours $\{1, \ldots k-1\}$.  Then we set $L_v = \{1, \ldots, k-1\}$ for all $v \in V$.
+\end{proof}
+\item \emph{Lower bounds}: Suffices to \emph{find} lists which make proper colouring impossible. 
+
+\emph{Upper bounds}: Mush show that \emph{whatever} the lists, there exists a proper colouring (assume lower bounds on lenghts of lists).
+\end{enumerate}
+\end{rem}
+
+
+\subsection*{How to construct a bipartite graph with large choice number (``Large''=``$>$3'')}
+
+Graph 1
+
+Note: \begin{enumerate}
+       \item Both sides must have $\geq 3$ vertices.
+\item Lists can't all be the same ; let's try all different on the left (in $V_1$).
+\item More edges make colouring harder ; (So may as well assume all $V_1$--$V_2$ edges present).
+      \end{enumerate}
+$V_1 = \{v_1,v_2,v_3\}$, $L_{v_1}=\{1,2,3\},~L_{v_2} = \{4,5,6\}, ~ L_{v_3} = \{7,8,9\}$.
+$V_2 = 3^3$ vertices for each triple $(a_1,a_2, a_3)$ with $a_1 \in L_{v_1}$, $a_2 \in L_{v_2}$, $a_3 \in L_{v_3}$, create a vertex $w_{(a_1,a_2,a_3)}$ and let $L_{w_{(a_1,a_2,a_3)}} = \{a_1, a_2, a_3\}$.  $E =$ all edges between $V_1$ and $V_2$.
+
+LINE?
+
+For any colouring $c$ from lists $\mathcal{L}$ the vertex $w_{(c(v_1),c({v_2}),c(v_3))}$ receives the same colour as on of $v_1, v_2, v_3$, so the colouring is not proper.
+
+\subsection*{Colouring Planar graphs}
+For all planar graphs $G$, $\chi(G) \leq 4$ GRAPH 2
+
+\begin{thm}
+\label{leq6}
+ Any planar graph $G$ has $\chi(G) \leq 6$.
+\end{thm}
+
+\begin{lem}
+\label{leq5}
+Any planar graph $G$ contains a vertex of degree $\leq 5$.
+\end{lem}
+
+\begin{proof}
+(of Lemma)
+ Let $G=(V,E)$ be planar. Know that $|E| \leq 3 |V| -6$.  $2 |E| = \displaystyle \sum_{v \in V} deg(v)$, so $\displaystyle \sum_{v \in V} deg(v) \leq 2 (3 |V| -6) < 6|V|$.
+\end{proof}
+
+\begin{proof}
+(of Thm \ref{leq6}) For any set $S \subset V$, $G[S]$ is planar, so by the lemma \ref{leq5}, $\exists v' \in S$ s.t. $deg_{G[S]} (v') \leq 5$.  Thus, $col(G) = \displaystyle max_{S \subset V}(\text{min degree of a vertex in }G[V] \leq 5$, but we saw that $\chi(G) \leq col(G) +1$, so $\chi(G) \leq 6$.
+\end{proof}
+
+%17/2/2010
+\section*{17/2/2010}
+
+\begin{thm}
+\label{chi5}
+For any planar graph $G$, $ch(G) \leq 5$ (and so $\chi(G) \leq 5$)
+\end{thm}
+
+\begin{rem}
+$ $
+\begin{enumerate}
+ \item Best possible: there exists planar graphs $G$ with $ch(G)=5$ (Smallest known example: 238 vertices)
+\item Bound not optimal for $\chi(G)$
+\end{enumerate}
+\end{rem}
+
+LINE?
+
+\begin{lem}
+\label{4hypo}
+Let $G=(V,E)$ be a connected plane graph, with lists $\mathcal{L}=\{l_v: v \in V\}$.  Write $C=v_1v_2 \ldots v_p v_1$ for the exterior face.
+
+Hypotheses:
+\begin{enumerate}
+ \item $C$ is a cycle; and all faces except for $C$ are triangles (have exactly 3 vertices).
+GRAPH 1
+\item $L_{v_1},L_{v_2}$ have at least one element\footnote{not both the same element, ie, if they each have exactly 1 element, they are not the same element.}.
+\item $L_{v_3},\ldots, L_{v_p}$ all have at least 3 elements.
+\item For all $v \notin \{v_1, \ldots, v_p\}, |L_v| \geq 5$.
+\end{enumerate}
+
+Conclusion: There exists a proper colouring $c$ of $G$ from lists $\mathcal{L}$
+\end{lem}
+
+\begin{proof}(of theorem \ref{chi5}  assuming lemma)
+
+Key point: Adding edges makes it harder to colour.  Fix a planar embedding of $G$.
+
+GRAPH 2
+
+We can find $G'=(V,E')$ a plane graph with $E \subseteq E'$ such that $G'$ satisfies hypothesis 1.  Now fix lists $\mathcal{L}=\{L_v | v \in V \}$ s.t. $\forall v \in V, |L_v| \geq 5$.  Then hypotheses 2--4 are automatically satisfied.
+
+By lemma \ref{4hypo}, there exists a proper colouring $c: V \rightarrow \mathbb{N}$ of $G'$ from lists $\mathcal{L}$.  Then $c$ is also a proper colouring of $G$ from lists $\mathcal{L}$.  Since the lists $\mathcal{L}$ were arbitrary (subject \emph{only} to the \emph{condition} that $|L_v| \geq 5 ~ \forall v \in V$), it follows that $ch(G) \leq 5$.
+\end{proof}
+
+\begin{proof}(of lemma \ref{4hypo})
+
+Let $G=(V,E)$ and $\mathcal{L}$ satisfy hypotheses 1--4.
+
+Induction on $|V|$
+\begin{itemize}
+\item[Base case]. $|V| = 3$ GRAPH 3
+\item[Inductive step]  Assume Lemma holds whenever $|V| \leq n$, and suppose $|V| = n+1$
+\begin{itemize}
+\item[Case 1:] There is some edge $\{v_i,v_j\} \in E$, $i <j, i \neq j-1$ (such an edge is called a \emph{chord} of $C$).  Since $\{v_i, v_j\}$ is a chord, $|V_1|, |V_2| \leq n$.
+
+GRAPH 4
+
+$G_1$: $\mathcal{L}_1 = \{L_v | v \in V_1\}$. All hypotheses (1--4) hold, and can be checked.  By the lemma, $\exists$ a proper colouring $c_1$ of $G_1$ from lists $\mathcal{L}$.
+
+$G_2$: Let $L_{v_i}^* = \{ c_1(v_i)\}$, $L_{v_j}^* = \{ c_1(v_j)\}$.  Let $\mathcal{L}_2 = \{L_v | v \in V_2, v \neq v_i, v \neq v_j\} \cup \{L_{v_i}^*,L_{v_j}^*\}$.  With these lists, hypotheses 1--4 are easily verified.  Therefore, by induction, $\exists$ a proper colouring $c_2$ of $G_2$ from lists $\mathcal{L}_2$.  Let $c: V \rightarrow \mathbb{N}$ be given by 
+\[c(v) = \left\{ \begin{array}{l}
+c_1(v) \text{ if } v \in V_1 \\
+c_2(V) \text{ if } v \in V_2
+\end{array} \right.
+\]
+Any edge $e = \{u,v\}$ of $G$ is either an edge of $G_1$, or of $G_2$, and in either case $c(u) \neq c(v)$.  Thus, $c$ is a proper colouring of $G$ from lists $\mathcal{L}$, this completes the inductive step in Case 1.
+\item[Case 2:] The cycle $C = v_1 v_2, \ldots, v_p v_1$ has no chord.  In this case we will remove the vertex $v_p$. GRAPH 5
+
+%19/2/2010
+\section*{19/2/2010}
+
+Idea: remove $v_p$, modify the lists to ``protect'' $v_p$, colour the graph with $v_p$ removed by induction, extend the colouring to $v_p$
+
+graph 1
+
+List the neighbours of $v_p$ in counterclockwise order as $v_{p-1} w_1 \dots w_k v_1$.  Since all interior faces are triangles, $v_{p-1} w_1 \ldots w_k v_1$ is a path in $G$.  Therefore $G' = G[V\setminus \{v_p\}]$ satisfies 1 of lemma \ref{4hypo}.
+
+Write 
+\begin{align*}
+L_{v_1} &= \{a_1, \ldots, a_i\} & i \ge 1 \\
+L_{v_p} &= \{b_1, \ldots, b_i\} & j \ge 3 
+\end{align*}
+
+Assume we have labeled the lists so that $a_1 \neq b_1$, $a_2 \neq b_2$.  Remove colours $b_1, b_2$ from lists of $w_1, \ldots, w_k$ if they appeared.  Also remove $a_2, \ldots, a_i$ from $L_{v_1}$
+
+Define lists $\mathcal{L}'= \{L_v' | v \in V \setminus \{v_p\}\}$ as follows :
+
+\[ L_v' = \left\{ \begin{array}{l l}
+L_v & \text{if } v \notin \{w_1, \ldots, w_k\}, v \neq v_1 \\
+\{a_1\} & \text{if } v = v_1\\
+L_{w_i}\setminus \{b_1, b_2\} & \text{if } v = w_i
+\end{array} \right.
+\]
+
+It is easily sen that 2--4 hold for $G'$, so by induction $G'$ has a proper colouring from lists $\mathcal{L}'$; call it $c'$.  Extend $c'$ to a proper colouring of $G$ from lists $\mathcal{L}$ by taking
+
+\[
+c(v) = \left\{ \begin{array}{ll}
+c'(v) & \text{if } v \neq v_p \\
+b_1 & \text{if } v=v_p, c'(v_{p-1}) \neq b_1 \\
+b_2 & \text{if } v=v_p, c'(v_{p-1}) = b_1
+\end{array} \right.
+\]
+
+$c$ is a proper colouring of $G$ from lists $\mathcal{L}$.  This completes the inductive step in case 2 and so completes the proof.
+\end{itemize}
+\end{itemize}
+\end{proof}
+%1/3/2010
+\section*{1/3/2010}
+
+\subsection*{Trees}
+\begin{defn}
+A graph $G=(V,E)$ is \emph{connected} if $\forall x, y \in V \exists$ a path in $G$ from $x$ to $y$.
+\end{defn}
+
+\begin{defn}
+A tree is a connected graph without any cycles
+\end{defn}
+
+graph 1-3 (examples)
+
+\begin{defn}
+A leaf in a graph $G=(V,E)$ is a vertex $v \in V$ with $deg(v)=1$
+\end{defn}
+
+\begin{thm}
+\label{gtree}
+Let $G=(V,E)$ be a graph.  The following are equivalent
+\begin{enumerate}
+\item $G$ is a tree (connected, no cycles)
+\item $\forall ~ u,v \in V$, there exists exactly one path from $u$ to $v$.(Path uniqueness)
+\item $G$ is connected but $\forall ~ e \in E$, $G - e $ is disconnected. (Minimal connected graph)
+\item $G$ contains no cycle but $\forall ~ u, v \in V$ distinct if $\{u,v\} \notin E$, then $G + \{u,v\}$ has a cycle (Maximal graph without cycles)
+\item $G$ connected, $|V| = |E|+1$ (Euler's formula)
+\end{enumerate}
+\end{thm}
+
+\begin{lem}
+\label{leaflem}
+\emph{(Leaf Lemma)} Let $G=(V,E)$ be a tree. If $|V| \geq 2$ then $G$ has $\geq 2$ leaves
+\end{lem}
+
+\begin{proof}
+Let $P= v_0 v_1 \ldots v_t$ be a path in $G$ of maximum length.  Claim that $v_0, v_t$ are leaves
+
+\begin{proof}
+(of claim)
+
+Suppose  $v_t$ is not a leaf, ie $deg(v_t)\ge 2$.  Thus $v_t$ has some neighbour $w \neq v_{t-1}$
+\begin{itemize}
+\item[Case 1:] $v_t$ has a neighbour $w \notin \{v_0, \ldots, v_{t-1}\}$.  Then $v_0 v_1 \ldots v_t, w$ is a path of greater length from $P$.
+\item[Case 2:] All of $v_t$'s neighbours are among $v_0 \ldots v_{t-1}$.  In this case $v_t$ has a neighbour $v_i$, some $i < t-1$.  But then $v_i v_{t+1} \ldots v_t v_i$ is a cycle, which contradicts that $G$ is a tree.
+\end{itemize} An identical proof shows that $v_0$ is a leaf
+\end{proof}
+To conclude $G$ has $\ge 2$ leaves, it suffices to show that $v_t \neq v_0$ i.e, $t \neq 0$, ie $t \ge 1$.  But any edge $e = \{u, v\} \in E$ yields a path of length 1, namely $u, v$.  Thus $t\ge 1$
+\end{proof}
+
+\begin{lem}
+\label{treegrow}
+\emph{(Tree growing lemma):} Let $G=(V,E)$ be a graph, and let $v \in V$ be a leaf.  Then TFAE
+\begin{enumerate}
+ \item $G$ is a tree
+\item $G-v$ is a tree
+\end{enumerate}
+\end{lem}
+
+\begin{proof}
+\begin{itemize}
+\item[$1 \Rightarrow 2$]
+
+Let $G=(V,E)$ be a tree, let $v \in V$ be a leaf.  For any $x,y \in V$, $x \neq v$, $y \neq v$, $\exists$ a path $P$ from $x$ to $y$ in $G$.  The vertex $v$ is not an element of this path, so $P$ is also a path between $x$ and $y$ in $G-v$.
+
+Furthermore, any cycle $C$ in $G-v$ is a cycle in $G$ as well.  Thus $G-v$ has no cycles
+
+\item[$2 \Rightarrow 1$]
+
+Suppose $G-v$ is a tree.  The vertex $v$ is in no cycles of $G$ since $deg(v)=1$.  It follows that any cycle of $G$ is a cycle of $G-v$ since $G-v$ has no cycles, it thus follows that $G$ has no cycles.
+
+Fix $x,y \in V$.  If $x \neq v, y \neq v$ then $\exists$ a path $P$ from $x$ to $y$ in $G-v$, so also in $G$.
+
+If $y=v, x \neq v$ then let $v' \neq v$ be the unique neighbour of $v$ in $G$, let $P = x v_1 \ldots v_k v'$ be a path from $x$ to $v'$ in $G-v$.  Then $x v_1 \ldots v_k v' v$ is a path from $x$ to $v$ in $G$
+\end{itemize}
+\end{proof}
+
+%3/3/2010
+\section*{3/3/2010}
+
+1 matchings flows
+1 planar graphs
+1 colouring
+
+\begin{proof}
+(of Theorem \ref{gtree}) Induction on $|V|$. $|V|=1$ obvious.  Let $G=(V,E)$ have $|V| = n \geq 2$, and suppose the theorem holds for all graphs $H=(V_H, E_H)$ with $|V_H| <n$.
+
+First: 1 $\Rightarrow$ 2,3,4,5.
+
+Suppose $G = (V,E)$ is a tree.  By lemma \ref{leaflem}, $G$ has a leaf $x$.  Call the neighbour of $x$, $x'$. GRAPH 1.
+
+Let $G'=G-x$, write $G'= (V', E')$.  Then $|V'| <n $.  By lemma \ref{treegrow}, $G'$ is a tree (1 holds for $G'$), by induction, 2 holds for $G'$.
+
+Claim that 2 holds for $G$.  Fix any $u,v \in V$.
+
+\begin{itemize}
+ \item[$u\neq x, v\neq x$] In this case no path from $u$ to $v$ contains $x$.  Thus, andy path $P$ from $u$ to $v$ in $G$ is also a path from $u$ to $v$ in $G'$.  Done by induction.
+\item[$u\neq x, v = x$]  Any path from $u$ to $x$ has the form $u, v_1, \ldots, v_k, x', x$.  Then $u, v_1, \ldots, v_k, x'$ is a path from $u$ to $x'$ in $G'$.  But only one such path exists (by induction), so there is only one path from $u$ to $x$ in $G$.
+\end{itemize}
+
+1 $\Rightarrow$ 3
+
+Let $x,x', G' = G -x = (G',V')$ as before.  Know that 3 holds for $G'$.  Let $e \in E$ be arbitrary.
+
+graph 2
+
+\begin{itemize}
+ \item[$e= \{x,x'\}$] In $G - e$, $x$ has degree zero so there are no paths from $x$ to any other vertices. Thus $G-e$ is not connected.
+\item[$e \neq \{x,x'\}$] Say $e = \{u,v\}$.  No path from $u$ to $v$ contains $x$, so any path from $u$ to $v$ in $G-e$ is also a path from $u$ to $v$ in $G' - e$.  But there are no paths from $u$ to $v$ in $G'-e$.  Therefore 3 holds for $G$.
+\end{itemize}
+
+1 $\Rightarrow$ 4
+
+Let $u,v \in V$ be distinct, $\{u,v\} \notin E$.  There is a path $P=u,v_1,\ldots, v_k, v$ from $u$ to $v$ in $G$.
+
+graph 3
+
+Then $C= u, v_1, \ldots, v_k, v$ is a cycle in $G+\{u,v\}$.
+
+1 $\Rightarrow$ 5
+
+By induction, know that $G' = (V', E')$ has $|V'| = |E'| +1$.
+
+\begin{align*}
+|V| = |V'| +1 =& (|E'| +1) +1 \\
+ =& (|E|-1 +1) +1  \\
+=&  |E| +1 
+\end{align*}
+
+2 $\Rightarrow$ 1
+
+If $G$ contained a cycle, say $C=u,v_1, \ldots, v_k, v, u$ then $P_1 = u,v$, $P_2= u, v_1, \ldots, v_k,v$ are distinct paths from $u$ to $v$.
+
+graph 4
+
+3 $\Rightarrow$ 1
+
+Need to check 3 $\Rightarrow G$ has no cycles.  Suppose $G$ contains a cycle $C= u, v_1, \ldots, v_k, v, u$.  Then $G-\{u,v\}$ contains a walk between any two vertices, so contains a paht between any two vertices. Thus $G-\{u,v\}$ is still connected, so 3 does hold.
+
+graph 5
+
+4 $\Rightarrow$ 1
+
+Assuming 4, $G$ contains no cycle; need to check $G$ is connected.  $\forall ~ u,v \in G$, if $\{u,v\} in E$ then $P=u,v$ is  apath from $u$ to $v$.  If $\{u,v \} \notin E$, then $G + \{u,v\}$ contains a cycle $C = v, u_1, \ldots, u_k, u, v$.  Then $v, u_1, \ldots, u_k, u$ is a path from $v$ to $u$.  Thus $G$ is connected so 1 holds.
+
+5 $\Rightarrow$ 1
+
+If 5 holds then $G$ is connected, need to check no cycles.  Let $x$ be a leaf of $G$, $G' = G-x$ is connected, $|V'| = |E'| +1$, so is a tree by induction.  So $G$ is also a tree.  Just need to check that $G$ has a leaf.  By the lemma \ref{handshake}(handshaking lemma), $\displaystyle \sum_{v \in V} deg(v) = 2 |E| = 2|V| -2 < 2|V|$.  Since $G$ is connected, $deg(v) \geq 1 \forall v \in V$, so some $v$ has $deg(v)=1$, so is a leaf.
+\end{proof}
+
+%5/1/2010
+\section*{5/1/2010}
+
+5 $\Rightarrow$ 1
+
+\begin{clm}
+If $G=(V,E)$ is connected and $|V| = |E|+1$, then $G$ is a tree.
+\end{clm}
+
+\begin{proof}
+Induction on $|V|$, $|V|=1$ obvious.  Suppose true for all $G=(V,E)$ with $|V| <n$, some $n \geq 2$.  Let $G=(V,E)$ have $|V| = n$, which is connected and has $|V|=|E|+1$.  Then apply handshake lemma:  $\displaystyle \sum_{v \in V} deg(v) = 2 |E| = 2|V| - 2 <2|V|$
+
+Since $G$ connected, $deg(v) \geq 1$ for all $v$, so there exists $v$ s.t. $deg(v)=1$, ie which is a leaf.  Then $G'= G -v = (V,E')$ has $|V'|=|E'| +1$, and $G'$ is connected.
+
+So by induction, $G'$ is a tree.  Since $G'$ is a tree and $G'= G -v $, for $v$ a leaf, by the tree growing lemma (lemma \ref{treegrow}) it follows that $G$ is a tree.
+\end{proof}
+
+\subsection*{Spanning Trees}
+
+\begin{defn}
+Leg $G = (V,E)$ be a graph.  A spanning tree of $G$ is a subgraph $T=(V,E')$ of $G$  (so $E' \subseteq E$, that is a tree.
+\end{defn}
+
+\begin{examp}
+graph 1
+
+graph 2
+
+graph 3
+\end{examp}
+
+\subsubsection*{A procedure for building spanning trees}
+
+Algorithm K (Call $|V|=n$, $|E|=m$)
+
+
+Input: 
+\begin{itemize}
+\item A graph $G=(V,E)$
+\item A list of the edges of $E$ in some order $e_1, \ldots, e_m$
+\end{itemize}
+
+Procedure: Let $E_0 = \emptyset$.  For each $i = 1, \ldots, m$, IF $(V, E_{i-1} \cup \{e_i\})$ has a cycle then let $E_i = E_{i-1}$
+
+OTHERWISE let $E_i = E_{i-1} \cup \{e_i\}$
+
+OUTPUT $F=(V,E_m)$
+
+GRAPH 4
+
+Algorithm K outputs $F$ which consists of a spannin gtree for each connected component of $G$.
+
+\begin{prop}
+\label{forest}
+If $F=(V,E_m)$ has $|E_m|=n-1$ then $F$ is a spanning tree of $G$.  If $|E_m| =n-k$, for some $k \geq 1$, then $G$  has $k$ connected components, $F$ has $k$ connected components, and each connected component of $F$ is spanning tree of a connected component of $G$.
+\end{prop}
+
+\begin{proof}
+In building $F$, we never add an edge which has a cycle, so all components of $F$ must be trees.  Let $T_1, \ldots, T_k$ be the connected components of $F$. Write $T_i = (V_i, E_{m,i})$, so $V_1 \cup V_2 \cup \ldots \cup V_k = V$, and $E_{m,1} \cup \ldots \cup E_{m,k} = E_m$.
+
+Know 
+\begin{align*}
+|V| = \displaystyle \sum_{i=1}^k |V_i| =& \sum_{i=1}^k (|E_{m,i}| +1)\\
+ =& k+ \sum_{i=1}^k |E_{m,i}| \\
+=& k+ |E_m| \\
+\text{Thus } |E_m| =& |V|-k \\
+=& n-k
+\end{align*}
+
+Now want to show $G$ has $k$ components (assuming $F$ does)
+
+\begin{itemize}
+\item $G$ has at \emph{most} $k$ components since $F$ has $k$ components.
+\end{itemize}
+
+\begin{clm}
+$G$ has $\geq k$ components.
+\end{clm}
+
+\begin{proof}
+Suppose $G$ has less that $k$ components, then there exists $x,y$ in \emph{different} components of $F$ (say $x \in V_i, y \in V_j, i \neq j$)  but with $x,y$ in the same component of $G$.  Let $P=x_0, x_1, x_2, \ldots, x_l$ be a path from $x$ to $y$ in $G$  Since $x,y$ are in different components of $F$, there is some $a < l$ s.t. $x_a \in T_i$, $x_{a+1} \notin T_i$.  
+
+graph 5
+
+Thus, writing $e = \{x_a, x_{a+1}\}$, we have $ e \notin E_m$.  That means that there is a cycle in $(V, E_m \cup \{e\}$); say $C=c_1, c_2, \ldots, c_r, c_1$, $c_r = x_a, c_1 = x_{a+1}$.  Then $c_1, \ldots, c_r$ is a path from $x_a$ to $x_{a+1}$ in $F$; so $x_a, x_{a+1}$ are in the same component.  Contradiction, thus $G$ has $ \geq k$ components.
+\end{proof}
+
+This proves Proposition \ref{forest}
+\end{proof}
+
+%12/3/2010
+\section*{12/3/2010}
+
+\begin{rec}
+\emph{Algorithm K} (summary)
+
+Input: A list of edges ($e_1, \ldots, e_m$)
+
+Procedure: Add edges one-by-one in order unless doing so creates a cycle.
+
+Output: A forest.
+
+Saw that if output has $n-k $ edges ($|V|=n$) then both the output and the original graph have $k$ connected components. Rephrasing, if it has $k$ edges then it has $n-k$ connected components.
+
+In particular, if the output is a tree, then it is a spanning tree of the graph $G=(V,E)$ with $E = \{ e_1, \ldots, e_m\}$
+\end{rec}
+
+LINE???
+
+It is also the ``first '' spanning tree relative to the order ($e_1, \ldots, e_m$), in the following sense.  Suppose the input is ($e_1, \ldots, e_m$) and suppose Algorithm K builds a tree $T=(V_T, E_T)$, with $E_T= \{e_{i_1}, e_{i_2}, \ldots, e_{i_{n-1}} \}$, listed in the order they appear in ($e_1, \ldots, e_m$).  In other words, listed so that $i_1 < i_2 < \ldots < i_{n-1}$.
+
+Now, let $T' = (V_{T'}, E_{T'})$ be any other spanning tree of $G=(V,E)$, where $E= \{ e_1, \ldots, e_m\}$, and write $E_{T'} = \{ e_{j_1}, e_{j_2}, \ldots, e_{j_m}\}$, listed so that $j_1 < j_2 < \ldots < j_m$.
+
+\begin{clm}
+ $j_1 \ge i_1, j_2 \ge i_2, \ldots , j_{n-1} \ge i_{n-1}$
+\end{clm}
+
+\begin{proof}
+Suppose that the claim doesn't hold, and let $k$ be as small as possible so that $j_k < i_k$.  So (in particular, for all $l <k$, $j_l \ge i_l$), $i _1 < i_2 < i_{k-1} \le j_{k-1} < j_k <i_k$.
+
+Write $F$ for the graph built so for at step $j_{k-1}$ of the algorithm, then $F=(V, \{e_{i_1}, \ldots, e_{i_{k-1}}  \})$
+
+graph 1
+
+Also let $F'= (V, \{e_{j_1}, \ldots, e_{j_{k-1}} \})$.  Aim: Show that $F$ and $F'$ are the same graph.
+
+LINE??
+
+$F$ and $F'$ are forests with the same number of edges, so have the same number of components.  We claim that each component of $F'$ is contained in a component of $F$.
+
+\begin{proof} (of mini claim):
+
+Fix any edge $e$ of $F'$, say $e= (v,w) = e_{j_l}$ for some $1 \le l \le k-1$.  Then either $e$ is an edge of $F$; or adding $e_l$ to $F$ would have created a cycle.  In either case, there is a path from $v$ to $w$ in $F$.  We have shown that for any edge $e$ of $F'$, there is a path between its endpoints in $F$.  This implies that each component of $F'$ is contained in a component of $F$.
+\end{proof}
+
+If each component of $F'$ is contained in a component of $F$, then each component of $F$ consists of one or more components of $F'$.  But no component of $F$ can contain \emph{more} that one component of $F'$, since $F$ and $F'$ have the same number of components.  Thus the components of $F$ and $F'$ are the same.
+
+$F= (V, \{ e_{i_1}, \ldots, e_{i_{k-1}} \})$, $F'= (V, \{ e_{j_1}, \ldots, e_{j_{k-1}} \})$ , $i_{k-1} \le j_k < i_k$
+
+graph 2
+
+We know adding $e_{j_k}$ to $F'$ doesn't create a cycle because $F' + e_{j_k} $ is a subgraph of $T'$ which is a tree. Then adding $e_{j_k}$ to $F$ also doesn't create a cycle, since $F$ and $F'$ have the same components.  But then we should have added edge $e_{j_k}$ to $F$ at step $j_k$ of the algorithm.  The fact that we did not do so contradicts the definition of the algorithm.  Since we only assumed that $j_k <i_k$ for some $1 \le k \le n-1$, this assumption must have been faulty.  Thus, $j_k \ge i_k$ for all $1 \le k \le n-1$.
+\end{proof}
+
+%15/3/2010
+\section*{15/3/2010}
+
+\subsection*{Minimum Weight Spanning Trees}
+Let $G=(V,E)$ be connected and let $w: E \rightarrow \mathbb{R}$ be a ``weighting function''.  Then we call $(G,w)$ a \emph{weighted graph}.\footnote{For this definition $G$ need not be connected.}  A \emph{minimum weight} spanning tree of $G$ is a spanning tree $T=(V, E_T)$ of $G$ such that for all other spanning trees $T'=(V,E_T)$, \[\sum_{e \in E_T} w(e) \le \sum_{e \in E_{T'}} w(e')\].
+
+Aim: Efficiently find MWSTs.
+
+\subsubsection*{Kruskal's Algorithm (Greedy algorithm)}
+
+Input: A weighted connected graph $(G=(V,E),w)$.
+
+Procedure: 
+\begin{enumerate}
+ \item List edges in $E$ in increasing order of weight as $(e_1, e_2, \ldots, e_m)$
+\item Run Algorithm K on $(e_1, e_2, \ldots, e_m)$ and output the resulting tree, say $T$
+\end{enumerate}
+
+\begin{clm}
+$T$ is a MWST of $G$
+\end{clm}
+
+\begin{proof}
+List the edges of $T$ as $(e_{i_1}, \ldots, e_{i_{n-1}})$ $i_1 < i_2 < \ldots < i_{n-1}$.  Then for any other spanning tree $T' = (V,  E_T)$, $E_{T'} = \{e_{j_1} , \ldots , e_{j_{n-1}} \}$ $j_1 < \ldots < j_{n-1}$ we have for all $i, 1\le k \le n-1$, $i_k \le j_k$ so $w(e_{i_k}) \le w(e_{j_k})$.  But then 
+\begin{align*}
+\sum_{e \in E_T} w(e) &= \sum_{k=1}^{n-1} w(e_{i_k}) \\
+& \le \sum_{k=1}^{n-1} w(e_{j_k}) \\
+& = \sum_{e \in E_{T'}} w(e)
+\end{align*}
+
+Thus, any other spanning tree $T'$ has total weight at least as large as the total weight of $T$, so $T$ is a \emph{minimum} weight spanning tree of $G$.
+\end{proof}
+
+\subsection*{Probability}
+
+Paradigm: ``Discrete (or finite) probability is just counting (combinatorics)''
+
+\subsubsection*{Proofs by counting}
+
+Shuffles
+\begin{itemize}
+\item New deck of cards (cards come in some fixed order)
+\item Shuffle by splitting in half, interleaving the cards. (Assumption: Any interleaving is possible, including ``left pile first, then right'' or vice-versa)
+\end{itemize}
+
+\begin{clm}
+4 shuffles can not yield all possible orders.
+\end{clm}
+
+\begin{proof}
+There are $52!$ possible orderings.  There are ${52 \choose 26}$ ways to perform a signle shuffle.  ${ 52 \choose 26} < 2^{52}$.\footnote{$\displaystyle \sum_{i=0}^n {n \choose i} = 2^n$}  In four shuffles, we can reach less than $(2^52) \cdot (2^52) \cdot (2^52) \cdot (2^52) = 16^52$ possible orders.  Since $16^52 < 52!$, the claim follows.
+\end{proof}
+
+\subsubsection*{Difficult Boolean Functions}
+
+A Boolean function of $n$ variables: $f: \{0,1\}^n \rightarrow \{0,1\}$ (Eg; computer circuit, decide whether to output voltage).   Any Boolean function can be represented as a \emph{logical formula} involving the input variables.
+
+\begin{examp}
+$(x_1 \land x_2) \lor (x_3 \land  \neg x_1)$.  If this represents $f$, then $f$ f outputs 1 if 
+
+\[\begin{array}{ll}
+x_1 = x_2 =1, or \\
+x_3 =1, x_1 = 0 
+\end{array}
+\]
+
+\end{examp}
+
+%17/3/2010
+\section*{17/3/2010}
+
+$x_1 \Rightarrow x_2$ 
+
+\begin{tabular}{|c|c|c|}
+\hline $x_1$ & $x_2$ & output \\ \hline
+0 & 0 & 1 \\ \hline
+0 & 1 & 1 \\ \hline
+1 & 0 & 0 \\ \hline
+1 & 1 & 1 \\ \hline
+\end{tabular}
+
+$(\neg x_1 \lor x_2)$
+
+$(\neg x_1 \land \neg x_2) \lor (\neg x_1 \land x_2) \lor (x_1 \land x_2)$
+
+\begin{prop}
+For all $n$ there exists a Boolean function $f:\{0, 1\}^n \rightarrow \{0,1\}$ that can't be defined by any formula with $ < \frac{2^n}{\log_2(n+8)}$ symbols
+\end{prop}
+
+\begin{proof}
+\begin{itemize}
+\item Counting Boolean functions
+
+How many Boolean functions on $n$ inputs?  Such a function has $2^n$ possible inputs (Domain has size $2^n$).  For each possible input there are 2 possible outputs: $\underbrace{2 \cdot 2 \cdots 2}_{2^n} =2^{2^n}$.
+
+\item Counting formulae
+
+How many formulae with variables $x_1, \ldots, x_n$ and length $\le m$\footnote{$m$ is a parameter of the calculation}
+
+Allowed symbols: $x_1, \ldots, x_n$ $\land, \lor, \neg, (, ), \Rightarrow, \iff, \textvisiblespace$
+
+$m$ ``locations'' in the formulae \textvisiblespace \textvisiblespace \dots \textvisiblespace
+
+In each location, can put one of $(n+8)$ symbols.  So an upper bound on the number of such formulae is $(n+8)^{m}$.
+
+If $2^{2^n}>(n+8)^m$ then not all functions can be represented by formulae of length $\le m$.  Taking logs, this becomes $2^n ? m \log_2(n+8)$
+
+\end{itemize}
+\end{proof}
+
+\begin{rem}
+Have some collection of objects $C$, want to show that $C$ contains at least one ``good'' object.  This is true $\iff$ choosing a random object yields a good object with positive probability.
+\end{rem}
+
+\subsection*{Finite Probability}
+
+\begin{defn}
+A finite probability space is a pair $(\Omega,\mathbb{P})$ where $\Omega$ is a finite set, $\mathbb{P}$ is a function $\mathbb{P} : 2^{\Omega} \rightarrow [0,1]$.  For $(\Omega,\mathbb{P})$ to be a probability space, $\mathbb{P}$ must be a \emph{probability function} which is to say, it must satisfy the following: $\mathbb{P}(\Omega) =1, \mathbb{P}(\emptyset) =0$, for disjoint sets $A \subset \Omega, B \subset \Omega, \mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)$
+\end{defn}
+graph 1
+
+\begin{examp}
+Deck of cards: $\Omega = \{\text{ permutations } \pi \text{ of } \{1,\dots,n\}\} = S_n$.  Permutation $\pi$: a bijection from $\{1, \dots,n\}$ to $\{1, \dots,n\}$
+
+ $ |\Omega| = 52!$, for all $A \subset \Omega$, $\mathbb{P}(A) = \frac{|A|}{52!}$
+
+In this model what is the probability that, say, A$\spadesuit$ precedes K$\heartsuit$ in the order?  This probability is ``obviously'' $\frac{1}{2}$.  To see this, represent the deck by $\{1,\dots,52\}$ with $1=A\spadesuit$, $2=K\heartsuit$.  Given $\pi$ with $\pi(1) < \pi(2)$ construct $\pi'$ with $\pi'(1) > \pi'(2)$ by letting $\pi'$ be $\pi'(1) = \pi(2)$, $\pi'(2) = \pi(1)$, $\pi'(k)=\pi(k)$ for all $k \ge 3$.  We've partitioned $\Omega$ into 2 sets: $A= \{ \pi | \pi(1) < \pi(2) \}$, $A' = \{\sigma | \sigma(1) > \sigma(2) \}$.  By the preceding bijection have $|A|=|A'|$ and obviously $A \cup A' = \Omega$.  So $\mathbb{P}(A)= \mathbb{P}(A')= \frac{1}{2}$
+\end{examp}
+
+%19/3/2010
+\section*{19/3/2010}
+
+\begin{examp}
+Random Graphs
+
+Informally: A graph with vertex set $\{1, \ldots, n\}$, and flip a coin once for each possible edge:
+
+Heads $\rightarrow$ add the edge
+Tails $\rightarrow$ don't add the edgecover
+
+We write $G_{r,\frac{1}{2}}$ for this ``random graph''.  Formally, $G_{r,\frac{1}{2}} = (\Omega, \mathbb{P})$, with $\Omega = \{ \text{Graphs with vertex set } \{1, \ldots, n\} \}$.  For a fixed $G \in \Omega$, $G=(V,E)$.  $\mathbb{P}(\{G\}) = \displaystyle \prod_{e \in E} \frac{1}{2} \prod_{e \notin E} \frac{1}{2} = 2^{- {n \choose 2}}$.  Then for any $A \subset \Omega$, $\mathbb{P}(A) = |A| \cdot 2^{- {n \choose 2}}$.
+
+\begin{examp}
+$A = \{ \text{All \emph{connected} graphs with vertex set }\{1, \ldots, n\} \}$.
+
+We usualy write $\mathbb{P}(G_{r, \frac{1}{2}} \text{ is connected} )$ or $\mathbb{P}(G_{r, \frac{1}{2}} \in A)$ rather than $\mathbb{P}(A)$.
+\end{examp}
+\end{examp}
+
+\begin{prop}
+$\lim_{n \rightarrow \infty} \mathbb{P}(G_{r, \frac{1}{2}} \text{ is bipartite} )=0$
+\end{prop}
+
+\begin{proof}
+For a graph $G \in \Omega$ to be bipartite, there must be $\cup \subset \{1, \ldots, n \}$ s.t. all edges of $G$ go between $\cup$ and $\{1, \ldots, n\} \setminus \cup =: W$.
+
+Write $B_{\cup} := \{ G \in \Omega | \text{all eges of }G \text{ go between} \cup \text{and } \{1, \ldots, n\} \setminus \cup \}$.  Then $\{ G \in \Omega | G \text{is bipartite} \} \subseteq \displaystyle \bigcup_{\cup \subseteq \{1, \ldots, n \}} B_{\cup}$.  So $ \displaystyle \mathbb{P}(G \text{ is bipartite}) \le \mathbb{P}(\bigcup_{\cup \subseteq \{1, \ldots, n \}} B_{\cup} \le \sum_{\cup \subseteq \{1, \ldots, n \}} \mathbb{P}(B_\cup) = *$ 
+
+graph 1 
+
+So, 
+
+\begin{align*}
+\sum_{\cup \subseteq \{1, \ldots, n \}} \mathbb{P}(B_\cup) & \le \sum_{\cup \subseteq \{1, \ldots, n \}} 2^{- {    { \lceil n/2 \rceil } \choose 2} } \\
+&= 2^n \cdot 2^{- {    { \lceil n/2 \rceil } \choose 2} } \\
+&= 2^{n - {    { \lceil n/2 \rceil } \choose 2} } \\
+& \rightarrow 0 \text{ as } n \rightarrow \infty
+\end{align*}
+\end{proof}
+
+\begin{defn}
+By $G_{n,p}$ we mean the probability space $(\Omega, \mathbb{P})$ with $\Omega = \{ \text{All graphs on } \{1, \ldots, n\}\}$, and so for $G \in \Omega$, $G=(V,E)$ 
+\begin{align*}
+\mathbb{P}(\{G\}) &=  \prod_{e \in E} p \prod_{e \notin E} (1-p) \\
+& = p^{|E|} (1-p)^{{n \choose 2} - |E|}
+\end{align*}
+
+For $p \neq 1/2$, not all graphs are equally likely, but if $G=(V_G, E_G)$ and $H = (V_H, E_H)$, and $|E_G| = |E_H|$ then $\mathbb{P}(\{G \}) = \mathbb{P}(\{H\})$.
+\end{defn}
+
+\begin{examp}
+$\Omega = \{0, 1, \ldots, n\}$, $\mathbb{P}(\{i\}) = \frac{{n \choose i} }{2^n}$.  $(\Omega, \mathbb{P})$ models the number of heads seen after $n$ tosses of a fair coin.
+
+For this problem, could also take $\Omega' = \{0,1\}^n$,DO THIS AS CASES $1=\text{``heads''}$, $0=\text{``tails''}$ $= \frac{{n \choose i}}{2^n} $.  For $v \in (v_1, \ldots, v_n) \in \Omega'$, $\mathbb{P}(\{v\})=2^{-n}$.  Then check if $S=\{v \in \Omega | \displaystyle \sum_{j=1}^n v_i = i \}$ $\mathbb{P}'(S) = \displaystyle \sum_{v \in S} \mathbb{P}(\{v\}) = \sum_{v \in S} 2^{-n} = \frac{|S|}{2^n}$
+\end{examp}
+
+\begin{defn}
+Let $(\Omega, \mathbb{P})$ be a probability space.  Two events $A \subset \Omega, B \subset \Omega$ are called independent if $\mathbb{P}(A \cap B) = \mathbb{P}(A) \cdot \mathbb{P}(B)$
+
+graph 2
+
+Similarly, if $A_1, \ldots, A_n$ are events we say $A_1, \ldots, A_n$ are independent if $\mathbb{P}(A_1 \cap A_2 \cap \ldots \cap A_n) =\mathbb{P}(A_1) \cdot \mathbb{P}(A_2) \ldots \mathbb{P}(A_n)$
+\end{defn}
+
+%22/3/2010
+\section*{22/3/2010}
+
+graph 1
+
+An orientation of the complete graph is a \emph{tournament}
+
+Does there exist a tournament $T$ such that for every pair $\{x,y\}$ there is some $z$ such that $z$ beat both ie, $2 \overrightarrow{x}, 2\overrightarrow{y} \in E(T)$? Yes!
+
+How about for every k-subset of $V$:
+
+Does $\exists T$ s.t. $\forall (x_1, \dots, x_k) \in V^k, \exists z $ s.t. $\overrightarrow{z v_i} \in E(T), \forall i =1,\dots,k$?
+
+We may define a random tournament $T$ by orienting edges at random and independently.
+
+We want to show that with positive probability $T$ does have the property that for every triple $x_1, x_2, x_3 \in V(T) \exists z \in V(T)$ s.t. $\overrightarrow{z x} \in E(T), i = 1, 2, 3$.  For $T$ to fail there must be a triple $x_1, x_2, x_3$ for which no $z$ works.  Let $E_{x_1,x_2, x_3}$ be the event that $\nexists \overrightarrow{z x_1} \overrightarrow{z x_2} \overrightarrow{z x_3} \in E(T)$
+
+
+
+%24/3/2010
+\section*{24/3/2010}
+
+\begin{examp}
+Let $\pi$ be a random permutation of $\{1, \ldots, n\}$.  An element $i \in \{1, \ldots, n \}$ is a \emph{left-maxima} of $\pi$ if $\pi(j) < \pi(i) ~ \forall j<i$. Let $f_3$ be the number of left-maxima of $\pi$, then $f_3$ is a random variable.
+\end{examp}
+
+For real numbers $x$ $(f = x)$ is an event and $\mathbb{P}(f=x) = \sum_{\substack \omega \in \Omega \\ f(\omega)=x} \mathbb{P}(\omega)$ same as $\mathbb{P}(\{\omega | f(\omega) = x \})$.
+
+\subsection*{Expectation}
+
+We define the \emph{expected value} $\mathbb{E}(f)$ of a random variable $f$ by $\mathbb{E}(f)= \sum_{\omega \in \Omega} \mathbb{P}(\omega)f(\omega)$. Alternatively, $\mathbb{E}(f) = \sum_{x \in inf} x \mathbb{P}(f =x)$.  In the case that $\mathbb{P}$ is uniform on $\Omega$, $\mathbb{f} = \frac{1}{|\Omega|} \sum_{\omega \in \Omega} f(\omega)$.
+
+$f_1 = $number of 1's in a random 0--1 string of length $n$. $s \in \Omega = \{0,1\}^n$, $(s_1, s_2, \ldots, s_n)$.
+
+(Aside: $f_1 (s) = 0 \iff s = (0, 0, \ldots, 0)$. $f_1 (s) = 1$ occurs for ${n \choose 1}$ string $s \in \{0,1\}^n$.  $f_1 (s) = k$ occurs for ${n \choose k}$ strings $s \in \{0,1\}^n$.)
+
+\begin{align*}
+\mathbb{E}(f_1) &= \frac{1}{2^n} \sum_{s \in \{0,1\}^n} f_1(s) \\
+ &= \frac{1}{2^n} \sum_{k=0}^n k {n \choose k}\\
+& = \frac{1}{2^n} \sum_{k=0}^n k \frac{n!}{k! (n-k)!} \\
+& = \frac{1}{2^n} \sum_{k=1}^n k \frac{(n-1)!}{(k-1)! (n-k)!}\\
+& = \frac{n}{2^n} \sum_{k=1}^n {{n-1} \choose {k-1}} \\
+& = \frac{n}{2^n} \underbrace{\sum_{k=0}^{n-1} {{n-1} \choose {k}}}_{2^{n-1}} \\
+& = \frac{n}{2}
+\end{align*}
+
+For each $s \in \{0,1\}^n$, let $\bar{s}$ be the opposite string, ie, $\bar{s}_i = 1 - s_i$ $i = 1, \ldots, n$.  $2 \mathbb{E}(f_1) = \frac{1}{2^n} \underbrace{\sum_{s \in \{0,1\}^n} f_1 (s) + f_1 (\bar{s})}_{n} = \frac{1}{2^n} 2^n n= n$
+
+\subsection*{Indicator functions}
+Given an even $A$ in a probability space $(\Omega, \mathbb{P})$ define the indicator function $I_A : \Omega \rightarrow \{0,1\}$ $\omega \mapsto { 1 \omega \in A 0 \omega \notin A}$.  $\mathbb{E}(I_A) = \sum_{\omega \in \Omega} \mathbb{P}(\omega) I_A( \omega) = \sum_{\omega \in A} \mathbb{P}(\omega) = \mathbb{P}(A)$.
+
+\begin{prop}
+(Linearity of Expectation)
+
+Let $\alpha, \beta \in \mathbb{R}$ and $f$ and $g$ random variable for the same probability space $(\Omega, \mathbb{P})$ then $\mathbb{E}(\alpha f + \beta g) = \alpha \mathbb{E}(f) + \beta \mathbb{E} (g)$.  In particular, $\mathbb{E}(\alpha f) = \alpha \mathbb{E} (f)$ and $\mathbb{E}(f+g) = \mathbb{E}(f) + \mathbb{E}(g)$
+\end{prop}
+
+\begin{proof}
+It suffices to prove the first claim.
+\begin{align*}
+\mathbb{E}(\alpha f + \beta g) & = \sum_{\omega \in \Omega} \mathbb{P}(\alpha f + \beta g)(\omega) \\
+&= \sum_{\omega \in \Omega} \mathbb{P}(\omega)(\alpha f(\omega) + \beta g(\omega)) \\
+& = \alpha \sum_{\omega \in \Omega} \mathbb{P}(\omega)f(\omega) + \beta \sum_{\omega \in \Omega} \mathbb{P}(\omega) g(\omega) \\
+&= \alpha \mathbb{E}(f) + \beta \mathbb{E} (g) 
+\end{align*}
+\end{proof}
+
+Let $s \in \{0,1\}^n$ be chosen at random.  Then for each $i$, $s_i$ is a randomly chosen element of $\{0,1\}$.  Let $A_i$ be event $s_i = 1$ for each $i = 1, \ldots, n$.  $(s_1, s_2, \ldots, s_n)$.  Note: $I_{A_i} (s) = s_i$, $f_1(s)  = \sum_{i=1}^n I_{A_i}(s)$.  So $f_1$ is $\sum_{i=1}^n I_{A_i}$.
+
+If $f_1, \ldots, f_k$ are rv's, then $\mathbb{E}(\sum_{i=1}^k f_i) =  \sum_{i=1}^k \mathbb{E}(f_i)$  .  So 
+\begin{align*}
+\mathbb{E}(f_1) &= \sum_{i=1}^n \mathbb{E}(I_{A_i}) \\
+& = \sum_{i=1}^n \underbrace{\mathbb{P}(A_i)}_{\frac{1}{2}} \\
+&= \frac{n}{2}
+\end{align*}
+
+%26/3/2010
+\section*{26/3/2010}
+
+$n$ hunters and $n$ rabbits.  Each hunter chooses a rabbit and shoots it.  The choices are uniformly and independently distributed.  $f_2=$ number of rabbits that survive.  Call the rabbits $r_1, \ldots, r_n$.  Let $Aj$ be event rabbit $r_j$ survives.  Then $f_2 = \sum_{i=1}^n I_{A_j}$; now $\mathbb{E}(f_2) = \mathbb{E}(\sum_{j=1}^n I_{A_j})= \sum_{j=1}^n (\mathbb{E}(I_{A_j}))= \sum_{j=1}^n \mathbb{P}(A_j)$.
+
+Fix a rabbit $r_j$.  $\mathbb{P}(A_j)= \mathbb{P} (r_j \text{ survives}  = \mathbb{P} (\text{every hunter chooses a rabbit other than }r_j) (=\cap \{\text{hunter $i$ chooses rabbit other than }r_j\}) = \prod_{i=1}^n \mathbb{P} (\text{hunter $i$ chooses rabbit other than }r_j) = \prod_{i=1}^n (1 - \frac{1}{n}) = (1-\frac{1}{n})^n$.  $\mathbb{E}(f_2) = n (1-\frac{1}{n})^n$.  In fact, $\mathbb{P}(A_j) = (1- \frac{1}{n})^n \rightarrow e^{-1}, n\rightarrow \infty$, so $\frac{\mathbb{E}(f_2)}{n} \rightarrow e^{-1}, n \rightarrow \infty$.
+
+$\pi \in S_n = ${permutations of $\{1, \ldots, n\}$} selected uniformly at random.  A left-maxima of $\pi$ is a number $i \in \{1,\ldots, n\}$ such that $\pi(i) >\pi(j) \forall j< i$ $(\pi(1), \pi(2), \ldots, \pi(n))$.  eg $(4,1,2,6,5,3,7)$, this $\pi$ has 3 left-maxima (4, 6, 7).
+
+\begin{examp}
+Another example would be $(n, \ldots )$ has 1 left-maxima.  $(1,2,3, \ldots, n)$ has $n$ left-maxima. 
+\end{examp}
+
+For each $j \in \{1, \ldots, n\}$, let $A_j$ be event that $j$ is a left-maxima. $f_3 = \sum_{j=1}^n I_{A_j}$ and $\mathbb{E}(f_3) = \mathbb{E}(\sum_{j=1}^n I_{A_j}) = \sum_{j=1}^n \mathbb{E} (I_{A_j}) = \sum_{j=1}^n \mathbb{P}(A_j)$
+
+\begin{clm}
+$\mathbb{P}(A_j) = \frac{1}{j}$
+\end{clm}
+
+\begin{proof}
+Consider the follwoing way to generate a random permutation. Put number $1, \ldots, n$ in a bag.  Pick out one at a time, uniformly at random.  Let first choice be value of $\pi(n)$, and the $ith$ choice the value of $\pi(n-i+1)$.  The even $A_j$ is exactly the event that when $j$ numbers remain we then pick the largest.
+\end{proof}
+
+so $\sum_{j=1}^n \mathbb{P}(A_j) = \sum_{j=1}^n \frac{1}{j} \approx \log(n)$
+
+\begin{thm}
+Let $G$ be a graph on $2n$ vertices with $m$ edges.  Then there are disjoint sets $A, B \subseteq V(G)$ with $|A|= |B|=n$ such that $e(A,B)\footnote{edges between $A$ and $B$} > \frac{m}{2}$.
+\end{thm}
+
+\begin{proof}
+ Let $A$ be chosen uniformly at random from the n-subsets of $V(G)$.  Let $B=V(G) \setminus A$. Consider $\mathbb{E}(e(A,B))$.  For each edge $\{u,v\} \in E(G)$ let $c_{\{u,v\}}$ be event that $u \in A, v \in B$ or $u \in B, v \in A$.  $e(A,B) = \sum_{\{u,v\} \in E(G)} I_{c_{\{u,v\}}}$ and so $\mathbb{E} (e(A,B)) = \mathbb{E}(\sum_{\{u,v\} \in E(G)} I_{c_{\{u,v\}}}) = \sum_{\{u,v\} \in E(G)}\mathbb{E}( I_{c_{\{u,v\}}}) = \sum_{\{u,v\} \in E(G)} \mathbb{P}(c_{\{u,v\}})$.  
+
+What is $\mathbb{P}(c_{\{u,v\}})$? $\mathbb{P}(c_{\{u,v\}}) = \mathbb{P}(u \in A, v\in B) + \mathbb{P}(u \in B, v\in A) = 2 \mathbb{P}(u \in A, v \in B) = 2 \frac{{2n-2 \choose n-1}}{{2n \choose n}}= \frac{n}{2n-1} > \frac{1}{2}$.
+
+So $\sum_{\{u,v\} \in E(G)} \mathbb{P}(c_{\{u,v\}}) > \frac{m}{2} \Rightarrow \exists A, ~|A|=n$ and $B = V \setminus A$, $|B|=n$ with $e(A,B) >\frac{m}{2}$.  If not, then $e(A,B) \le \frac{m}{2} ~\forall ~ A, ~|A|=n, B=V \setminus A, |B|=n$.  Then $\mathbb{E}(e(A,B)) = \sum_{\substack{A \subseteq V \\ |A| = n }} \mathbb{P}{A \text{ chosen }e(A,V\setminus A)}\le \frac{m}{2}\sum_{\substack{A \subseteq V \\ |A| = n }} \mathbb{P}(A \text{ chosen})$
+\end{proof}
+
+%29/3/2010
+\section*{29/3/2010}
+
+%31/3/2010
+\section*{31/3/2010}
+
+\subsection*{Markov Inequality}
+
+$(\Omega, \mathbb{P})$ finitie probability space.  Let $X : \Omega \rightarrow [0, \infty)$ be a random variable, let $\mu = \mathbb{E}X$.  Then for any $t>0$ \[\mathbb{P}(X\ge t \mu) \le \frac{1}{t}\], ie $x = t \mu$, $\frac{1}{t} = \frac{\mu}{x}$ for any $x >0$ \[\mathbb{P}(X\ge x) \le \frac{\mu}{x} = \frac{\mathbb{E}[X]}{x}\]
+
+weird line things
+
+[Recall: $\mathbb{P}(X \ge x) = \mathbb{P}(\{\omega | X(\omega) \ge x\})$]
+
+\begin{proof}
+Fix $t>0$. 
+\begin{align*}
+\mu &= \sum_{\omega \in \Omega} X(\omega) \mathbb{P}(\{\omega\}) \\
+&\ge \sum_{\{\omega \in \Omega | X(\omega) \ge t \mu \}} X(\omega) \mathbb{P}(\{\omega\}) \\
+& \ge \sum_{\{\omega \in \Omega | X(\omega) \ge t \mu \}} t \mu \mathbb{P}(\{\omega\}) \\
+&= t \mu \sum_{\{\omega \in \Omega | X(\omega) \ge t \mu \}}  \mathbb{P}(\{\omega\}) \\
+&= t \mu \mathbb{P}(\{\omega \in \Omega | X(\omega) \ge t \mu \}) \\
+&= t \mu \mathbb{P}(X \ge t \mu) \\
+\mu &\ge t \mu \mathbb{P}(X \ge t \mu)
+\end{align*}
+\end{proof}
+This is best possible because can always have $X: \Omega \rightarrow [0, \infty)$ with $\mathbb{P}(X = t \mu) = \frac{1}{t}$, $\mathbb{P}(X=0) = 1 - \frac{1}{t}$, ie take $\Omega = \{\omega_1, \omega_2\}$, $\mathbb{P}(\{\omega_1\})= \frac{1}{t}$, $\mathbb{P}(\{\omega_2\})=1-\frac{1}{t}$, $X(\omega_1) = t \mu$, $X(\omega_2) = 0$
+
+\subsubsection*{Application: Birthday Paradox}
+Class with $n$ students, what is the probability that some two people in the class have the same birthday\footnote{Assumption: Birthdays are indpendent and are uniform over the 365 days of the year}?
+
+Write $N=$ number of pairs of people having the same birthday.  Want to bound $\mathbb{P}(N \ge 1)$.  By Markov inequality, $\mathbb{P}(N \ge 1) \le \mathbb{E}N$  For $1 \le i \le n$, $1\le j \le n$, $i \neq j$, let $A_{ij}=$ event that person $i$, person $j$ have the same birthday.  Then $N = \displaystyle \sum_{1 \le i < j \le n}I_{[A_{ij}]}$, 
+
+\begin{align*}
+\mathbb{E}N &=   \sum_{1 \le i < j \le n} \mathbb{E} I_{[A_{ij}]} \\
+&= \sum_{1 \le i < j \le n} \mathbb{P}(A_{ij}) \\
+& = {n \choose 2} \mathbb{P}(A_{12}) = {n \choose 2} \frac{1}{365}
+\end{align*}
+
+If $n \le 19$ then ${n \choose2} \frac{1}{365} < \frac{1}{2}$.  So if $n \le 19$ then $\mathbb{P}(\text{some two people have the same birthday}) < \frac{1}{2}$
+
+The true value of $\mathbb{P}(N=0) = \mathbb{P}(\text{no two people have the same birthday})$.  
+\begin{align*}
+\mathbb{P}(N=0) &= (1 - \frac{1}{365})(1 - \frac{2}{365}) \cdots (1 - \frac{n-1}{365}) \\
+&= \frac{364 \cdot 363 \cdots (365-(n-1))}{365 \cdot 365 \cdots 365}
+\end{align*}
+
+When $n \ge 23$ this is $<2$
+
+\subsection*{Ramsey Theory}
+
+Question: How large must a graph $G$ be so that either $\alpha(G) \ge 3$ or $\omega(G) \ge 3$?
+
+Answer: 6.  Any graph $G=(V,E)$, $|V| \ge 6$, has either $\alpha(G) \ge 3$ or $\omega(G) \ge 3$.
+
+\begin{proof}
+Fix $v \in V$.  
+\begin{itemize}
+\item[$deg(v) \ge 3$]
+If there are any edges among neighbours of $v$ then $\omega(G) \ge 3$.
+
+graph 1
+
+If there are \emph{no} edges among neighbours of $v$ then $\alpha(G) \ge |N(v)| \ge 3$.
+\item[$deg(v) <3$]
+
+Let $M(v) = V \setminus (v \cup N(v))$.  Then $|M(v)| = |V| - |V \cup N(v) | \ge 3$.  If there are two elements of $M(v)$ not joined by an edge, then $\alpha(G) \ge 3$
+
+graph 2
+
+If all pairs of vertices in $M(v)$ are joined by edges then $\omega(G) \ge |M(v)| \ge 3$
+
+
+\item[$r(3,3) = 6$]
+
+$\ge 6$ just saw.  $>5$ : graph 3
+
+\end{itemize}
+\end{proof}
+
+
+\section*{7/4/2010}
+
+\subsection*{Assignment 5}
+\begin{itemize}
+\item $G_{n,p} \rightarrow$ Vertex set  $V= \{ 1, \dots, n\}$, flip a biased coin for each edge; probability of heads = $p$, probability of tails = $(1-p)$.  Head: put the edge in the graph. Tails: leave the edge out.  $\Omega = \{ \text{Graphs }G\text{ with vertex set }\{1,\dots,n\}\}$.  $\mathbb{P}(\{G=(V,E)\} = p^{|E|}(1-p)^{ {n \choose 2} - |E|} $
+\end{itemize}
+\begin{examp}
+$\mathbb{P}(G_{4, \frac{1}{4}}\frac{1}{4}^{5}\frac{3}{4}=\frac{3}{1024}$
+$G_{n,p} \rightarrow N: \Omega \rightarrow \{0,1,2, \ldots \}$, $N=$ number of 4-cycles in $G_{n,p}$.
+\begin{align*}
+\mathbb{P}(N>0) &= \mathbb{P} (N \ge 1) \\ 
+& \le \frac{\mathbb{E} N} {1} = \sum_{\text{possible 4-cycles}} \mathbb{E} [I_{C \text{ is a 4-cycle in }}G]
+\end{align*}
+\end{examp}
+
+\subsection*{Ramsey Theory}
+\begin{defn}
+For integers $k, l \ge 1$, we let $r(k,l) =\min\{n \text{ if } G=(V,E) \textmd{ is a graph with $n$ vertices then either } \omega{G} \ge k \text{ or } \alpha(G) \ge l\}$
+\end{defn}
+
+\begin{thm}
+\emph{(Pigeonhole principle)}  Let $n_1, n_2, \ldots, n_t$ be positive integers, let $X$ be a set with $|X|\ge 1 + \displaystyle \sum_{i=1}^t (n_i -1)$, and let $X_1, \ldots, X_t$ form a partition of $X$.  Then for some $i$, $1 \le i \le t$, $|X_i| \ge n_i$.
+\end{thm}
+
+\begin{thm}
+\label{ramseythm}
+\emph{(Ramsey's Theorem)}  For all $k, l \ge 1$, $r(k,l) \le {k + l -2 \choose k-1}$
+\end{thm}
+
+\begin{cor}
+For all $k \ge 1$, $r(k,k) \le 4^{k-1} $
+\end{cor}
+\begin{proof}
+By the theorem \ref{ramseythm}, $r(k,k) \le {k + l -2 \choose k-1} = {2(k-1) \choose k-1} \le \sum_{i=0}^{2(k-1)} {2(k-1) \choose i} = 2^{2(k-1)}= 4^{k-1}$
+\end{proof}
+
+\begin{proof}
+(of theorem \ref{ramseythm}) Induction on $k$ and $l$.
+\begin{itemize}
+ \item[Base case] $k=1$ or $l=1$, $r(k,l)=1 = {k+l -2 \choose k-1}$
+
+GRAPH 1
+
+\item[Inductive step] Assume that $k,l \ge 2$ and that the theorem holds for $(k,l-1)$ and for $(k-1,l)$.
+
+Let $n_1 = {k + (l-1) -2 \choose k-1} = {k + l -3 \choose k-1}$, $n_2 = {(k-1) + l-2 \choose (k-1) -1} = {k+l -3 \choose k-2}$, $n={k+l-2 \choose k-1}$.  Note: $n_1 +n_2 = n$.  In other words, $n = 1 + ((n_1 -1) + (n_2 -1) +1)$.
+
+Know by induction
+\begin{itemize}
+\item If $H= (V_H, E_H)$, $|V_H| \ge n_1$, then either $\omega(H) \ge k$ or $ \alpha(H) \ge l-1$.
+\item If $F=(V_F, E_F)$, $|V_E| \ge n_2$, then either $\omega(F) \ge k-1$ or $\alpha(F) \ge l$.
+\end{itemize}
+
+Now let $G=(V,E)$, $|V| \ge n$.  Choose $v \in V$ arbitrarily, 
+
+graph 2
+
+$|A \cup B| = (n_1 -1 ) + (n_2 -1 ) +1$.  By Pigeonhole principle, either $|A| \ge n_1$ or $|B| \ge n_2$
+
+\begin{itemize}
+\item[Case 1] $|A| \ge n_1$, then let $H= G[A]$.  By induction, either $\omega(H) \ge k$, or $\alpha(H) \ge l-1$.  If $\omega(H) \ge k$ holds, then $\omega(G) \ge k$.  If $\alpha(H) \ge l-1$ holds, then there is $S \subset A$, $S = \{ s_1, \ldots, s_{l-1}\}$, and $S$ is an independent set in $H$. 
+
+ Then $\{s_1, \ldots , s_{l-1}, v \}$ is an independent set in $G$, so $\alpha(G) \ge l$.
+
+\item[Case 2] $|B| \ge n_2$, then let $F= G[B]$.  By induction either $\omega(F) \ge k-1$ or $\alpha(F) \ge l$. 
+
+If $\alpha(F) \ge l$ holds, then $\alpha(G) \ge l$ since $\alpha(G) \ge \alpha(F)$.  
+
+If $\omega(F) \ge k-1$ holds, then there is $T= \{t_1, \ldots, t_{k-1}\} \subset B$ which forms a clique in $F$.   Then $\{t_1, \ldots, t_{k-1}, v\}$ is a clique in $G$, so $\omega(G) \ge |\{t_1, \ldots, t_{k-1}, v\}|=k$
+\end{itemize}
+
+All we assumed was $|V| \ge n$, and derived that either $\omega(G) \ge k$ or $\alpha(G) \ge l$, so $n \ge r(k,l)$ is $r(k,l) \le {k+l -2 \choose k-1}$
+\end{itemize}
+\end{proof}
+
+\subsubsection*{Lower bounds for diagonal Ramsey Numbers}
+\begin{thm}
+ Let $k, n$ be positive integers.  If ${n \choose k } 2^{1- {k \choose 2}} <1$, then $r(k,k) >n$
+\end{thm}
+
+\begin{cor}
+ For all $k \ge 3$ we have $r(k,k) \ge 2^{\frac{k}{2}}$
+\end{cor}
+
+
+
+\section*{9/4/2010}
+
+\begin{proof}
+(of theorem \ref{ramseythm}) Let $n,k$ satisfy ${n \choose k} 2^{1-{k \choose 2}}<1$.  Consider $G_{n,\frac{1}{2}}$ $\Omega = \{ \text{Graphs} G=(V,E), |V| = \{ 1, \dots, n \} \forall G \in \Omega$, $\mathbb{P}(\{G\}) = \frac{1}{2^{ {n \choose 2}  }}$.
+
+Let $B =  \text{Event that }\omega(G_{n,p}<k$, $\alpha(G_{n,p})$
+
+\begin{clm}
+$\mathbb{P}(B)>0$
+\end{clm}
+
+Assume that the claim holds.  Then $B \neq \emptyset$, ie $\exists G \in \Omega, G \in B $. In other words, $\exists G \in \Omega$ s.t. $\omega(G) < k $, $\alpha(G) <k$.  So $r(k,k) >n$, or such a  $G$ could not exist.
+
+\begin{proof}
+(of Claim) Let $C = \Omega \setminus B$.  $\underbrace{\mathbb{P}(B \cup C)}_{\mathbb{P}(\Omega) = 1} = \mathbb{P}(B) + \mathbb{P}(C)$.  So $\mathbb{P}(B) > 0 \iff \mathbb{P}(C) <1$.  $C = \text{event that either }\omega(G_{n,\frac{1}{2}}) \ge k \text{ or }\alpha(G_{n, \frac{1}{2}}) \ge k$, $E = \text{event that }\omega(G_{n, \frac{1}{2}}) \ge k$, $F = \text{event that }\alpha (G_{n, \frac{1}{2}}) \ge k$.  So $C = E \cup F$, so $\mathbb{P}(C) \le \mathbb{P}(E) + \mathbb{P}(F)$.
+
+First we bound $\mathbb{P}(E)$
+
+$E$ occurs $\iff$ there is some set $S \subset \{1, \dots, n \}$, $|S| = k$, s.t $S$ forms a clique in $G_{n, \frac{1}{2}}$.  Write $E_S$ for the event that $S$ forms a clique in $G_{n, \frac{1}{2}}$.  $\mathbb{P}(E_S) = \frac{1}{2}^{  {k \choose 2}} = 2^{-{k \choose 2}}$.  Also $\displaystyle E = \bigcup_{\substack{S \subset \{1, \dots, n\} \\ |S| = k}} E_S$, so $\displaystyle \mathbb{P}(E) = \mathbb{P}(\bigcup_{\substack{S \subset \{1, \dots, n\}\\|S| = k}}) = \sum_{\substack{S \in \{1, \dots, n\}\\|S|=k}} \mathbb{P}(E_S) = \sum_{\substack{S \in \{1, \dots, n\}\\|S|=k}} 2^{-{k \choose 2}} = {n \choose k} 2^{-{k \choose 2}}$
+
+Next we bound $\mathbb{P}(F)$
+
+For $S \subset \{1, \dots , n\}$, $|S| = k$ , let $F_S$ = event that $S$ forms an independent set in $G_{n, \frac{1}{2}}$.  Then $\mathbb{P}(F_S) = 2^{-{k \choose 2}}$.  Then we have $\displaystyle F = \bigcup_{\substack{S \subset \{1, \dots, n\} \\ |S| = k}}F_S$, so $\displaystyle \mathbb{P}(F) \le \sum_{\substack{S \subset \{1, \dots, n\} \\ |S| = k}} \mathbb{P}(F_S) = { n \choose k} 2^{-{k \choose 2}}$.  $C =$ event that either $\omega(G_{n, \frac{1}{2}}) \ge k$  or $\alpha(G_{n,\frac{1}{2}}) \ge k$.  We have $\mathbb{P}(C) \le 2 \cdot {n \choose k} 2^{-{k \choose 2}} = {n \choose k } 2^{1-{k\choose 2}}<1$. So $\mathbb{P}(B) = 1 - \mathbb{P}(C) >0$.
+\end{proof}
+\end{proof}
+
+\section*{12/4/2010}
+\subsection*{Review}
+
+Hall's thm
+
+A matching is maximal $\iff$ no augmenting paths (bipartite graph)
+
+tutte's thm $\rightarrow$ general graphs
+
+Flows
+
+Network $\rightarrow$ directed graphs with capacity function (source and sink)
+flows $\rightarrow$ functions f: $\overrightarrow{E} \rightarrow [0,\infty)$ satisfying feasibility, conservation of flow.
+Maximal flows always exist.
+augmenting paths $f(e)>0$
+a flow is maximum $\iff$ no augmenting paths to t $\iff$ separator of capacity val(f)
+
+max-flow min-cut thm
+
+val of a max flow $\equiv$ cap of a min separator
+flow integrality theorem
+menger's theorems
+
+Planar graphs
+
+Euler's formula: $|V| - |E| + |F| = 2$.
+Bounds on the number of edges of planar graphs $\underbrace{|V| \le 3 |E| - 6, |V| \le 2 |E| =4}_{\text{Euler's formula + doulbe counting/handshaking lemma}}$
+Jordan curve theorem
+
+Kuratowski's thm
+
+G planar $\iff$ no $K_5$ or $K_{3,3}$-subdivision
+
+Colouring: vertex, edge, list
+
+$\omega(G) \le \chi(G) \le \Delta(G) +1$
+Brookes thm (for connected G)
+$\chi(G) \le \Delta(G)$ unless G is a complete graph $\Delta(G) =2$, G is an odd cycle
+Greedy colouring $\chi(G)\le col(G)+1$
+$\chi(G) \ge \frac{|V|}{\alpha(G)} $
+
+Edge colouring
+$\chi'(G) \ge \Delta(G)$
+$\chi'(G) \le 2 \Delta(G) -1$
+
+Vizing thm:$\chi(G) \le \Delta(G) +1$
+
+K\"o nig's thm $\chi'(G)=\Delta(G)$ if G is bipartite
+
+List colouring
+$\chi(G) \le \chi^l(G) \le \Delta(G) +1 \le col(G) +1$
+Examples of bipartite graphs with large list chromatic number
+
+colouring planar graphs
+planar graphs always have a vertex of degree $\le 5$, so $col(G)\le 5$, so $\chi(G)\le 6$
+$\exists$ planar graph with $\chi(G)\ge 4$
+
+thm (thomassen) if G is planar, then $\chi^l(G) \le 5$
+
+Trees
+Characterizing trees
+is a tree (connected no cycles)
+unique path between any two vertices
+connected but removing any vertex disconnects
+no cycles but adding any edge creates a cycle
+connected and |V| = |E| +1
+Has no cycles, and |V| = |E| + 1
+
+end vertex lemma
+leaf removal lemma
+
+spanning trees
+algorithm k: adds edges one-by-one unless doing so creates a cycle (input (edges) output: spanning tree of G)
+Algorithm k outputs the "first" spanning tree w.r.t. the input order.
+Kruskall's algorithm (given weight function of graph): order edges in non decreasing order of weight, run algorithm K on edges in this order.
+
+Probability
+proofs by counting
+Axioms of probability
+$\mathbb{P}(A \cup B) \le \mathbb{P}(A) + \mathbb{P}(B)$
+Independence
+Random variables
+Indicator functions (special example)
+Random set $S, N=|S|, N = \sum_{v}I_{[v \in S]}$
+linearity of expectation, $\mathbb{E}[X_1 + X_2 + \dots X_k] = \mathbb{E}[X_1] + \dots + \mathbb{E}[X_k]$
+Markov's inequality $\mathbb{P}(X \ge t) \le \frac{\mathbb{E}X}{t}$
+
+Aplications(Probability)
+large bipartite subgraphs
+turans thm (used in complement form)
+
+ramsey thm : ramsey numbers $r(k,l)$
+upper bound $r(k,l) \le {k+l -2 \choose k-1}, r(k,k) \le 4^{k-1}$
+lower bound $r(k,k) \ge 2^{k/2}$
+Note: $r(k,l) \ge r(k-1, l)$
+$r(k,l) \ge r(k, l-1)$
+if $k>l$, then $r(k,l) \ge r(k-1, l)  \dots \ge  r(l,l)$
+if $k<l$, then $r(k,l) \ge r(k, l-1) \dots \ge r(k,k)$
+
+We then get $r(k,l) \ge \min(r(k,k)$, $r(l,l))$
+$r(k.l) \ge (\min(k,l))^{\min(k,l)/2}$
+
+ 
+\end{document}
